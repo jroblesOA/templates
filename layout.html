@@ -32,8 +32,7 @@
     }
     
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
-    #content-CLIENTE,
-    #content-CLIENTE * {
+    #content-CLIENTE, #content-CLIENTE * {
         font-family: 'Open Sans', sans-serif !important;
     }
     
@@ -153,7 +152,8 @@
     <br>
     <br>
     <h4>Hola {{or relatedUser.firstName relatedLead.firstName}},
-        <br><br> Mi nombre es {{agent this 'firstName'}} {{agent this 'lastName'}}, {{agent this 'position'}} de {{host.name}}, es un gusto tener la oportunidad de presentar nuestra propuesta en respuesta a los requerimientos entregados, espero que sea
+        <br><br> 
+        Mi nombre es {{agent this 'firstName'}} {{agent this 'lastName'}}, {{agent this 'position'}} de {{host.name}}, es un gusto tener la oportunidad de presentar nuestra propuesta en respuesta a los requerimientos entregados, espero que sea
         de su agrado.
         <br><br> Quedo a su disposición, para cualquier duda o aclaración puede contactarme vía WhatsApp al número: <br>
         <img height="28px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAq1JREFUWIXt2M+LTlEcx/HXIMbvxCQlhAWaiMVIyc9kwcKGlcjOyk6RX002/gDK0s5CSvmxsJAFGwkNIWKwsJDFGL9/9Vic5+HpOvc+9z73zkTNp76Lczvne97ne879nu+9jGhE/7Y6Khi/HGvQjXmYghoG8QIPcB199efDqi704mV98jz2HEcxfTgAO+uAHwsAJu0DDmPcUEF241EJwKTdx+KqITcLkagKsmGD2Fgl5LchgGzYF2woC9ltaCIZi+yidiE7pZ/J20LqqRK2D2PbAe1NcXhCyJ9bKgat4WBRyC7xFHQz0e9CxaCDmFYENC2a+xL95qYsqIwdygvZIf3G2RHpf7Bi0Kd5QVdkOElGFKbiU8WwS5KTjIpMvCZjEasS7U6cw/iMMe1oXfJBDLQ7w8EWTGxqb8CmckxR/cUQA52X4WAy9jS1rwp3dtXKYvitW7LPz2tMaurfgx8txhS1ZBqMRnR0i4XMwvHEwo61GFNUtTydrmm94p9Y3zSmQ3ipqorolSRULKIvcyxmFM5idr1dw87YBG2qPzZhUn05nc3EJeEbCb5iG05H+r7O6bOhXC/ocsW26YaQDZq1VbhhGts4DtvrwHl85i75+gvC3hYi3KwxQuJuLt2m4KRwxtN8Pc4LCUcKgtbwCitz+u/BkxQ/B4qAThdKrqKw34XKq9UX5gTxwmdAqB0K6VAboA17hl3iFXsnzqeM258Gk/WnZCweYkHelUX0FheFM/yu7ms35kf63vXnliuse6pL4lk2gIXtABKS+XBAfpZdWrbU3mGAHCgLCZcjjrPyX1G7o8R2NzRB2JIa3uAUVguV/GG8LwE4ILzdY8pCwlqcEX7nxBzOEC6F5wUAHwvJvHCepPyPXFgmnLOlmFMH+SFcGP1CgXFdwatxRCP63/QLM+1xsX5F8sAAAAAASUVORK5CYII="
@@ -168,7 +168,9 @@
         </div>
         <div class="column column-11">
             <h4 style="font-weight:400 !important; line-height: 1.3;">Cordial saludo,<br>
-                <span style="color:#0C233A">{{agent this 'firstName'}} {{agent this 'lastName'}}</span> / <span style="color:#5D9FD7">{{agent this 'position'}}</span><br> Email. {{agent this 'email'}}<br> Teléfono. {{agent this 'mobile'}}</h4>
+                <span style="color:#0C233A">{{agent this 'firstName'}} {{agent this 'lastName'}}</span> / <span style="color:#5D9FD7">{{agent this 'position'}}</span><br> 
+                Email. {{agent this 'email'}}<br> 
+                Teléfono. {{agent this 'mobile'}}</h4>
             <!--{{agent this 'street'}}, {{agent this 'city'}}<br>
                 {{agent this 'country||country.name'}}<br>-->
         </div>
@@ -222,7 +224,9 @@
 
     <!-- Table -->
     {{{tableSlot this 'currencyInt' 'CONCEPTO' 'CANTIDAD' 'PRECIO/U' 'IMPUESTO' 'DESCUENTO' 'TOTAL' 'SUBTOTAL' 'numbersToLettersInt'}}}
-    <br> {{#if (neqType numberOfPayments 1)}}
+    <br> 
+    
+    {{#if (neqType numberOfPayments 1)}}
     <div class="row">
         <div class="column column-6 hidden">
             text
@@ -231,7 +235,10 @@
             <h4>* El total debe ser dividido en {{numberOfPayments}} pagos iguales.</h4>
         </div>
     </div>
-    {{/if}} {{/if}} {{#unless (neqType numberOfPayments 0)}}
+    {{/if}} 
+    {{/if}} 
+    
+    {{#unless (neqType numberOfPayments 0)}}
     <br>
     <h1>Forma de pago</h1>
     <br>
