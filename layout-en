@@ -1,0 +1,376 @@
+<style>
+    @font-face {
+        font-family: 'Ansage';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Black.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Black.woff') format('woff');
+        font-weight: 900;
+        font-style: normal;
+    }
+    
+    @font-face {
+        font-family: 'Ansage';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-SemiBold.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-SemiBold.woff') format('woff');
+        font-weight: 600;
+        font-style: normal;
+    }
+
+	@font-face {
+        font-family: 'Ansage';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Bold.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Bold.woff') format('woff');
+        font-weight: 700;
+        font-style: normal;
+    }
+    
+    @font-face {
+        font-family: 'Ansage';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Medium.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Medium.woff') format('woff');
+        font-weight: 500;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Ansage';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Regular.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }	
+    
+    @font-face {
+        font-family: 'Ansage';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Light.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Light.woff') format('woff');
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Ansage';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Thin.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Ansage/Ansage-Thin.woff') format('woff');
+        font-weight: 100;
+        font-style: normal;
+    }	
+    #content-CLIENTE, #content-CLIENTE * {
+        font-family: 'Ansage', sans-serif !important;
+    }
+    
+    #contenido table {
+        width: 100% !important;
+    }
+</style>
+
+<div id="content-CLIENTE">
+    <!--
+       <div style="position: absolute; width: inherit; color:#ffffff; right: 60px;">
+           <div class="text-right" style="">
+               <h4 style="font-weight: 400; font-size: 1rem; line-height: 22px;"><strong>Proposal No. {{proposalNumber}} <br> Version No. {{{versionSlot this}}}</strong></h4>
+               <h5 style="line-height: 22px;">{{#if expirationDate}}Expiration date {{shortDate expirationDate}} {{/if}}</h5>
+               <p style=" line-height: 22px; font-size: 0.8rem;">Status: <strong>{{{ statusStyle status }}}</strong></p>
+           </div>
+       </div>-->
+
+    <img style="display: inline-block;" src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/cover.jpg" class="img-cover" alt="">
+    <br><br><br><br><br><br><br>
+
+    <!-- ======= Contenido Cover ======== -->
+    <div style="position: absolute;top: 1020px;width: 90%;/*text-align:center;*/">
+        <!--<div style="color: white; margin-top: 80px;">
+               <span style="display: block;font-weight: 400;font-size: 1.3em;">Version {{{versionSlot this}}}</span>
+               <span style="display: block;font-weight: 400;margin-top: 7px;">{{#if expirationDate}}Expiration date {{shortDate expirationDate}} {{/if}}</span>
+           </div> -->
+        <div style="color: white !important;margin-top: 20px;margin-bottom: 20px;">
+            <span style="font-size: 2.6rem;font-weight: 700;line-height: 1;">{{title}}</span>
+        </div>
+        <!--<span class="separator" style="display: block;width: 110px;height: 5px;background: #164193;margin: 30px auto;"></span>-->
+        <div style="color: white; margin-top: 20px;">
+            <span style="font-size: 2.5rem;font-weight: 400;line-height: 1;">
+                {{#if relatedUser}}
+                Atn. {{relatedUser.firstName}} {{relatedUser.lastName}} {{#if relatedUser.company.name}}/ {{or relatedUser.company.name relatedLead.companyName }} {{/if}}
+                {{else if relatedLead}}
+                Atn. {{relatedLead.firstName}} {{relatedLead.lastName}} {{#if relatedLead.companyName}}/ {{or relatedUser.company.name relatedLead.companyName }} {{/if}}
+                {{else}}
+                <p class="text-danger">WARNING: Proposal has no related user or lead.</p>
+                {{/if}}
+            </span>
+        </div>
+    </div>
+
+    <!-- ====== Notice of Privacy ====== -->
+    <div style="position: absolute;top: 1275px;margin:0 auto;width:90%;text-align: center !important;">
+        <span style="color: #ffffff;font-size: 1rem;padding: 10px 25px;">NOTICE OF PRIVACY</span>
+        <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">You receive the following commercial offer at your own request and in this way you accept our policy for the treatment of personal data, otherwise it is important that you immediately report the incident to the following email:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a>
+        </p>
+    </div>
+
+    <div class="row">
+
+        <!-- logo -->
+
+        <div class="column column-6">
+            <img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/logo-CLIENTE.png" style="max-width: 225px;">
+            <!--<div class="bg-logo"></div>-->
+        </div>
+
+        <!-- Doc Info -->
+
+        <div class="column column-6 text-right">
+            <h5>Proposal No. {{proposalNumber}} - Version No. {{{versionSlot this}}}</h5>
+            <h5>Creation date {{shortDate createdAt}}<br>Last update {{shortDate updatedAt}}<br>{{#if expirationDate}}Expiration date {{shortDate expirationDate}} {{/if}}</h5>
+            <p>Status: <strong>{{{ statusStyle status }}}</strong></p>
+        </div>
+
+    </div>
+    <br>
+
+    <div class="row">
+
+        <!-- Host Info -->
+
+        <div class="column column-6" style="margin-top:-30px">
+            <!--    {{{hostCoSlot this}}}-->
+            <p style="font-size: 18px;">
+                {{agent this 'street||host.street'}}<br> {{agent this 'city||host.city'}}, {{agent this 'country||country.name'}}<br> Phone: {{agent this 'mobile||phone||company.phone'}}</p>
+        </div>
+
+        <!-- If relatedUser -->
+
+        <span style="display: none;">{{#if relatedUser}}</span>
+        <div class="column column-6 text-right">
+            <h2 style="color:#2c2c2c">Atn. {{or relatedUser.firstName relatedLead.firstName}} {{or relatedUser.lastName relatedLead.lastName}}</h2>
+            <h3 style="color:#2c2c2c">{{or relatedUser.company.name relatedLead.companyName }}</h3>
+        </div>
+
+        <span style="display: none;">{{else if relatedLead}}</span>
+        <div class="column column-6 text-right">
+            <h2 style="color:#2c2c2c">Atn. {{or relatedUser.firstName relatedLead.firstName}} {{or relatedUser.lastName relatedLead.lastName}}</h2>
+            <h3 style="color:#2c2c2c">{{or relatedUser.company.name relatedLead.companyName }}</h3>
+        </div>
+
+        <!-- Else show warning -->
+
+        <span style="display: none;">{{else}}</span>
+        <div class="column column-6 text-left">
+            <p class="text-danger">WARNING: Proposal has no related user or lead.</p>
+        </div>
+        <span style="display: none;">{{/if}}</span>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1 style="font-size:3.1rem; color:#333333">{{title}}</h1>
+    <h3>by {{agent this 'firstName'}} {{agent this 'lastName'}}</h3>
+    <span class="separator" style="display: block;width: 110px;height: 5px;background: #ff0059;margin: 30px 0;"></span>
+    <!--<div class="divisor bg-primary"></div>-->
+    <br>
+    <br>
+    <br>
+    <p style="font-size: 1.4rem;line-height: 1.4;">Hi {{or relatedUser.firstName relatedLead.firstName}},
+        <br><br> 
+        My name is {{agent this 'firstName'}} {{agent this 'lastName'}}, {{agent this 'position'}} of {{host.name}}, and it is a pleasure to have the opportunity to present our proposal in response to the requirements submitted, I hope you like it.
+        <br><br> 
+        I remain at your disposal, for any questions or clarification you can contact me via WhatsApp at the number: <br>
+        <img height="28px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAq1JREFUWIXt2M+LTlEcx/HXIMbvxCQlhAWaiMVIyc9kwcKGlcjOyk6RX002/gDK0s5CSvmxsJAFGwkNIWKwsJDFGL9/9Vic5+HpOvc+9z73zkTNp76Lczvne97ne879nu+9jGhE/7Y6Khi/HGvQjXmYghoG8QIPcB199efDqi704mV98jz2HEcxfTgAO+uAHwsAJu0DDmPcUEF241EJwKTdx+KqITcLkagKsmGD2Fgl5LchgGzYF2woC9ltaCIZi+yidiE7pZ/J20LqqRK2D2PbAe1NcXhCyJ9bKgat4WBRyC7xFHQz0e9CxaCDmFYENC2a+xL95qYsqIwdygvZIf3G2RHpf7Bi0Kd5QVdkOElGFKbiU8WwS5KTjIpMvCZjEasS7U6cw/iMMe1oXfJBDLQ7w8EWTGxqb8CmckxR/cUQA52X4WAy9jS1rwp3dtXKYvitW7LPz2tMaurfgx8txhS1ZBqMRnR0i4XMwvHEwo61GFNUtTydrmm94p9Y3zSmQ3ipqorolSRULKIvcyxmFM5idr1dw87YBG2qPzZhUn05nc3EJeEbCb5iG05H+r7O6bOhXC/ocsW26YaQDZq1VbhhGts4DtvrwHl85i75+gvC3hYi3KwxQuJuLt2m4KRwxtN8Pc4LCUcKgtbwCitz+u/BkxQ/B4qAThdKrqKw34XKq9UX5gTxwmdAqB0K6VAboA17hl3iFXsnzqeM258Gk/WnZCweYkHelUX0FheFM/yu7ms35kf63vXnliuse6pL4lk2gIXtABKS+XBAfpZdWrbU3mGAHCgLCZcjjrPyX1G7o8R2NzRB2JIa3uAUVguV/GG8LwE4ILzdY8pCwlqcEX7nxBzOEC6F5wUAHwvJvHCepPyPXFgmnLOlmFMH+SFcGP1CgXFdwatxRCP63/QLM+1xsX5F8sAAAAAASUVORK5CYII=" style="">
+        <strong> {{agent this 'mobile'}}</strong> and I will reply as soon as possible.
+    </p>
+    <br><br><br><br><br>
+
+    <div class="row">
+        <div class="column column-1">
+            <img src="{{agent this 'avatars.medium'}}" width="100%" style="border-radius: 50%;">
+        </div>
+        <div class="column column-11">
+            <p style="font-size: 1.4rem;line-height: 1.4; color:#2C2C2C;">
+                Regards,<br>
+                {{agent this 'firstName'}} {{agent this 'lastName'}} {{agent this 'position'}}<br> 
+                Email. {{agent this 'email'}}<br> 
+                Phone. {{agent this 'mobile'}}</p>
+            <!--{{agent this 'street'}}, {{agent this 'city'}}<br>
+                {{agent this 'country||country.name'}}<br>-->
+        </div>
+    </div>
+    <br><br><br><br><br><br><br>
+
+    <!-- ====== Loop Genérico ======== -->
+    <div style="position: relative;height: 450px;">
+        <!-- <video autoplay="" loop="" muted="" playsinline="" class="img-cover" style="background:#000000;">
+        <source src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/loop.mp4" type="video/mp4" width="100%">
+    </video>  -->
+        <img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/background.jpg" class="img-cover" alt="backgroundLoop" style="">
+        <div style="transform: translateY(-115%);">
+            <p style="font-size: 3.7rem;line-height: 1.1;color: #ffffff;font-weight: 700;margin-top:40px;margin-bottom: 40px;">{{or relatedUser.firstName relatedLead.firstName}}</p>
+            <!--<span class="separator" style="display: block;width: 110px;height: 5px;background: #ffa000; margin: 30px auto;"></span>-->
+            <p style="font-size: 3.1rem;line-height: 1.2;color: #ffffff;font-weight: 300;margin-top:40px;">WE MAKE VIDEOS<br>THAT TELL STORIES</p>
+        </div>
+    </div>
+
+    <!-- ====== Features ======== -->
+    <!--<iframe width="100%" height="680px" style="margin-top: 60px;margin-bottom: 60px;" src="https://www.youtube.com/embed/V00fHt6T_rA?mute=0&amp;rel=0&amp;loop=0&amp;modestbranding=1&amp;showinfo=0&amp;controls=1&amp;iv_load_policy=3&amp;autohide=1&amp;autoplay=0&amp;disablekb=1&amp;fs=0&amp;html5=1&amp;enablejsapi=1" class="img-cover" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>-->
+
+    <img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/features1.jpg" alt="features1 CLIENTE" class="img-cover" style="margin-top:60px; margin-bottom: 0px;">
+    <img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/features2.jpg" alt="features2 CLIENTE" class="img-cover" style="margin-top: 0px; margin-bottom: 0px;">
+    
+    <div>{{{productsSnippets}}}</div>
+    <div id="contenido">{{{content}}}</div>
+    
+    <img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/features3.jpg" alt="features3 CLIENTE" class="img-cover" style="margin-top: 0px; margin-bottom: 0px;">
+
+
+    {{#if products.length}}
+    <br><br>
+    <h1>Investment cost</h1>
+    <br>
+    <h2>{{#unless comparativeProposal}}— The total cost is {{currencyInt total currency.code}} {{currency.code}}{{#if discount}} after {{currency discount}} {{currency.code}} of discount{{/if}}.
+    {{#if (neqType numberOfPayments 1)}} This amount should settled in {{numberOfPayments}} payments of {{divCurrencyInt total numberOfPayments}} {{currency.code}}.{{/if}}{{/unless}}</h2>
+    <br>
+
+    <!-- Table -->
+    {{{tableSlot this 'currencyInt' 'CONCEPT' 'QUANTITY' 'UNIT PRICE' 'VAT' 'DISCOUNT' 'TOTAL' 'SUBTOTAL' 'numbersToLetters'}}}
+    <br> 
+    
+    {{#if (neqType numberOfPayments 1)}}
+    <div class="row">
+        <div class="column column-6 hidden">
+            text
+        </div>
+        <div class="column column-6 text-right">
+            <h4>* Total should be divided in {{numberOfPayments}} equal payments.</h4>
+        </div>
+    </div>
+    {{/if}} 
+    {{/if}} 
+    
+    {{#unless (neqType numberOfPayments 0)}}
+    <br>
+		<h1>Number of Payments</h1>
+		<br>
+		<h2>— The total cost shall be paid as follows:</h2>
+    <br> 
+    {{{paymentsSlot this 'Payment No.' 'Amount' 'Percent' 'Special Observations' 'Due Date' 'currency'}}}
+    <br> 
+    {{/unless}}
+
+    <!-- Signatures -->
+    <br> 
+    {{#if signatures.length}}
+    <br><br>
+    <h1 class="text-success">Approved</h1>
+    <br>
+    <h2>{{or relatedUser.firstName relatedLead.firstName}}, thanks for your approval!</h2>
+    <h3>This proposal will be available at this address any time you need it. If you want to download a copy <a href="{{downloadUrl}}"><strong>clic here.</strong></a></h3>
+    {{else}}
+    <h1>Approval</h1>
+    <br>
+    <h3>— {{or relatedUser.firstName relatedLead.firstName}}, you can immediately approve this proposal by adding your electronic signature.</h3>
+    {{/if}} 
+    {{{signaturesSlot this 'Name' 'Indentification No.' 'Date'}}}
+    <br><br> 
+    {{#unless signatures.length}} 
+   	{{{qrSlot this
+   	'By registering your signature you accept the terms and conditions of this document, the use of the electronic signature is equivalent to a signature on a physical document with a pen and paper.'
+   	'Sign here — from any device.'}}}
+    {{/unless}}
+    <br>
+    <h6><b>Considerations:</b> This proposal has been developed by {{host.name}} and will remain under its ownership until the moment in which a formal acceptance is perfected, in this way, its contents cannot be disclosed to any third party, nor can the original concepts developed for {{host.name}} be used for commercial purposes.
+        <br><br>
+        <img src="https://s3.amazonaws.com/cdn.nodriza.io/assets/img/template/recycle.gif" alt="" width="26px" style="padding: 3px;"> {{host.name}} believes in sustainability, for this reason we present electronic proposals in favor of the environment. Before printing this document, consider whether it is really necessary.
+        <br><br> 
+        Copyright {{host.name}} ®2023</h6>
+    <br><br><br>
+
+    <div>
+        <img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/footer.jpg" class="img-cover" alt="footer CLIENTE" style="margin-top: -10px;">
+    </div>
+    <!-- <div style="position: absolute;left: 85%;margin-top: 15px;">
+            <a href="https://www.facebook.com/InforumGroup" target="_blank" style="margin-right: 10px;"><img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/facebook.png" style="cursor: pointer;"></a>
+            <a href="https://www.instagram.com/inforum_group" target="_blank" style="margin-right: 10px;"><img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/instagram.png" style="cursor: pointer;"></a>
+            <a href="https://www.linkedin.com/company/1147600/admin/" target="_blank" style="margin-right: 10px;"><img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/linkedIn.png" style="cursor: pointer;"></a>
+    </div> -->
+
+    <style>
+        @media print {
+            @page {
+                size: letter portrait;
+                margin: 5%;
+            }
+            .nf-html-editor table {
+                width: 80vw !important;
+                margin: 10px auto;
+            }
+            .nf-html-editor th,
+            .nf-html-editor td {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            .image.get-app {
+                display: none;
+            }
+            .image.qr-code {
+                margin-right: 50px;
+                display: none;
+            }
+            .nf-html-editor {
+                width: 24cm;
+            }
+            img {
+                max-width: 21cm;
+            }
+            .img-cover {
+                margin-top: 0 !important;
+                max-width: 21.6cm;
+                max-height: 27.9cm;
+            }
+            .image.get-app {
+                display: none;
+            }
+            .nf-html-editor h1 {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 16pt !important;
+                line-height: 110% !important;
+            }
+            .nf-html-editor h2 {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 14pt !important;
+                line-height: 110% !important;
+            }
+            .nf-html-editor h3 {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 12pt !important;
+                line-height: 110% !important;
+            }
+            .nf-html-editor h4 {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 10pt !important;
+                line-height: 110% !important;
+            }
+            .nf-html-editor h5 {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 8pt !important;
+                line-height: 110% !important;
+            }
+            .nf-html-editor p {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 11pt !important;
+                line-height: 110% !important;
+            }
+            .nf-html-editor li {
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 11pt !important;
+                line-height: 110% !important;
+            }
+        }
+    </style>
+</div>
