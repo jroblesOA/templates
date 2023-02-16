@@ -224,7 +224,7 @@
     <br><br>
     <h1>Investment cost</h1>
     <br>
-    <h2>{{#unless comparativeProposal}}— The total cost is {{currencyInt total currency.code}} {{currency.code}}{{#if discount}} after {{currency discount}} {{currency.code}} of discount{{/if}}.
+    <h2>{{#unless comparativeProposal}}— The total cost is {{currencyInt total currency.code}} {{currency.code}}{{#if discount}} after {{currency discount currency.code}} {{currency.code}} of discount{{/if}}.
     {{#if (neqType numberOfPayments 1)}} This amount should settled in {{numberOfPayments}} payments of {{divCurrencyInt total numberOfPayments}} {{currency.code}}.{{/if}}{{/unless}}</h2>
     <br>
 
