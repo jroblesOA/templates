@@ -216,7 +216,7 @@
     <br><br>
     <h1>Costo de la inversión</h1>
     <br>
-    <h2>{{#unless comparativeProposal}}— El costo total es de {{currencyInt total currency.code}} {{currency.code}}{{#if discount}} teniendo en cuenta un descuento de {{currencyInt discount}} {{currency.code}}{{/if}}.{{#if (neqType numberOfPayments 1)}} Este
+    <h2>{{#unless comparativeProposal}}— El costo total es de {{currencyInt total currency.code}} {{currency.code}}{{#if discount}} teniendo en cuenta un descuento de {{currencyInt discount currency.code}} {{currency.code}}{{/if}}.{{#if (neqType numberOfPayments 1)}} Este
         monto deberá ser pagado en {{numberOfPayments}} cuotas de {{divCurrencyInt total numberOfPayments}} {{currency.code}}.{{/if}}{{/unless}}</h2>
     <br>
 
