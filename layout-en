@@ -101,7 +101,7 @@
 
     <!-- ====== Notice of Privacy ====== -->
     <div style="position: absolute;top: 1275px;margin:0 auto;width:90%;text-align: center !important;">
-        <span style="color: #ffffff;font-size: 1rem;padding: 10px 25px;">NOTICE OF PRIVACY</span>
+        <p style="color: #ffffff;font-size: 1rem;">NOTICE OF PRIVACY</p>
         <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">You receive the following commercial offer at your own request and in this way you accept our policy for the treatment of personal data, otherwise it is important that you immediately report the incident to the following email:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a>
         </p>
     </div>
