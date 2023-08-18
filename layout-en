@@ -274,6 +274,12 @@
    	'By registering your signature you accept the terms and conditions of this document, the use of the electronic signature is equivalent to a signature on a physical document with a pen and paper.'
    	'Sign here — from any device.'}}}
     {{/unless}}
+   
+    <!-- URL en el pdf -->
+    <h3 id="messajeUlr" style="display:none">— {{or relatedUser.firstName relatedLead.firstName}} you can consult the complete proposal by clicking <a id="messajeUrlData" target="_blank" href="https://customer-design.prolibu.com/v1/document/proposal/{{id}}/full?source=none"><strong>here.</strong></a></h3>
+    <br>    
+    
+    <!-- Consideraciones -->  
     <br>
     <h6><b>Considerations:</b> This proposal has been developed by {{host.name}} and will remain under its ownership until the moment in which a formal acceptance is perfected, in this way, its contents cannot be disclosed to any third party, nor can the original concepts developed for {{host.name}} be used for commercial purposes.
         <br><br>
@@ -290,6 +296,15 @@
             <a href="https://www.instagram.com/inforum_group" target="_blank" style="margin-right: 10px;"><img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/instagram.png" style="cursor: pointer;"></a>
             <a href="https://www.linkedin.com/company/1147600/admin/" target="_blank" style="margin-right: 10px;"><img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/linkedIn.png" style="cursor: pointer;"></a>
     </div> -->
+
+    <script>
+		let source = 'source=none&rand=5366263';
+		const relatedLead = '{{relatedLead.email}}';
+		if(relatedLead) source = 'source={{relatedLead.email}}';
+		const urlProposal = `https://${window.location.hostname}/v1/document/proposal/{{id}}/full?source=none`;
+		const paragraphElement = document.getElementById('messajeUrlData');
+		paragraphElement.href = urlProposal;
+	</script>
 
     <style>
         @media print {
@@ -369,6 +384,9 @@
                 font-size: 11pt !important;
                 line-height: 110% !important;
             }
+            #messajeUlr {
+            	display: block !important;
+            } 
         }
     </style>
 </div>
