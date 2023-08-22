@@ -276,8 +276,7 @@
     {{/unless}}
    
     <!-- URL en el pdf -->
-    <h3 id="messajeUlr" style="display:none">— {{or relatedUser.firstName relatedLead.firstName}} you can consult the complete proposal by clicking <a id="messajeUrlData" target="_blank" href="https://customer-design.prolibu.com/v1/document/proposal/{{id}}/full?source=none"><strong>here.</strong></a></h3>
-    <br>    
+    <h3 id="messajeUlr" style="display:none">— {{or relatedUser.firstName relatedLead.firstName}} you can consult the complete proposal by clicking <a id="messajeUrlData" target="_blank" href="https://customer-design.prolibu.com/v1/document/proposal/{{id}}/full?source=none"><strong>here.</strong></a><br></h3>   
     
     <!-- Consideraciones -->  
     <br>
