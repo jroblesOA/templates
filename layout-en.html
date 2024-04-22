@@ -287,6 +287,11 @@
 		const paragraphElement = document.getElementById('messajeUrlData');
 		paragraphElement.href = urlProposal;
 	</script>
+	<script>
+		window.changeBackground = function (urlImage) {
+		document.getElementById('img-container').style.backgroundImage = 'url(' + urlImage + ')'
+		}
+	</script>	
 
     <style>
         @media print {
