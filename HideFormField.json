@@ -121,7 +121,7 @@
     "visible": true
   },
   "name": {
-    "visible": false
+    "visible": true
   },
   "password": {
     "visible": false
