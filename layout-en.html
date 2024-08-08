@@ -238,7 +238,6 @@
     {{/unless}}
 
     <!-- Signatures -->
-    <br> 
     {{#if signatures.length}}
     <br><br>
     <h1 class="text-success">Approved</h1>
@@ -252,7 +251,7 @@
     <h3>— {{or relatedUser.firstName relatedLead.firstName}}, you can immediately approve this proposal by adding your electronic signature.</h3>
     {{/if}} 
     {{{signaturesSlot this 'Name' 'Indentification No.' 'Date'}}}
-    <br><br> 
+    <br>
     {{#unless signatures.length}} 
    	{{{qrSlot this
    	'By registering your signature you accept the terms and conditions of this document, the use of the electronic signature is equivalent to a signature on a physical document with a pen and paper.'
@@ -263,7 +262,6 @@
     <h3 id="messajeUlr" style="display:none">— {{or relatedUser.firstName relatedLead.firstName}} you can consult the complete proposal by clicking <a id="messajeUrlData" target="_blank" href="https://customer-design.prolibu.com/v1/document/proposal/{{id}}/full?source=none"><strong>here.</strong></a><br></h3>   
     
     <!-- Consideraciones -->  
-    <br>
     <h6><b>Considerations:</b> This proposal has been developed by {{host.name}} and will remain under its ownership until the moment in which a formal acceptance is perfected, in this way, its contents cannot be disclosed to any third party, nor can the original concepts developed for {{host.name}} be used for commercial purposes.
         <br><br>
         <img src="https://s3.amazonaws.com/cdn.nodriza.io/assets/img/template/recycle.gif" alt="" width="26px" style="padding: 3px;"> {{host.name}} believes in sustainability, for this reason we present electronic proposals in favor of the environment. Before printing this document, consider whether it is really necessary.
