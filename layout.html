@@ -236,7 +236,6 @@
     {{/unless}}
 
     <!-- Signatures -->
-    <br> 
     {{#if signatures.length}}
     <br><br>
     <h1 class="text-success">Aprobado</h1>
@@ -250,7 +249,7 @@
     <h3>— {{or relatedUser.firstName relatedLead.firstName}}, esta propuesta puede ser aprobada instantaneamente añadiendo su firma digital.</h3>
     {{/if}} 
     {{{signaturesSlot this 'Nombre' 'No. Identificación' 'Fecha'}}}
-    <br><br> 
+    <br>
     {{#unless signatures.length}} 
    	{{{qrSlot this
    	'Registrando su firma acepta en su totalidad los términos y condiciones de este documento, así como el uso de la firma digital como una representación de una firma en documento físico con pluma y papel.'
@@ -261,7 +260,6 @@
     <h3 id="messajeUlr" style="display:none">— {{or relatedUser.firstName relatedLead.firstName}} puedes consultar la propuesta completa haciendo <a id="messajeUrlData" target="_blank" href="https://customer-design.prolibu.com/v1/document/proposal/{{id}}/full?source=none"><strong>clic aquí.</strong></a><br> </h3>   
     
     <!-- Consideraciones -->  
-    <br>
     <h6><b>Consideraciones:</b> Esta propuesta ha sido desarrollada por {{host.name}} para su organización y se mantendrá bajo su propiedad hasta el momento en que una aceptación formal se perfeccione, de esta forma, sus contenidos no podrán ser revelados a ningún tercero, así como tampoco los conceptos originales desarrollados por {{host.name}} podrán ser utilizados con fines comerciales.
         <br><br>
         <img src="https://s3.amazonaws.com/cdn.nodriza.io/assets/img/template/recycle.gif" alt="" width="26px" style="padding: 3px;"> {{host.name}} es una empresa ambientalmente responsable, por esta razón presentamos propuestas electrónicas en pro del medio ambiente, antes de imprimir este documento, considere si es realmente necesario.
