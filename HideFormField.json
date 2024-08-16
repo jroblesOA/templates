@@ -1,46 +1,22 @@
 {
  "proposal": {
-   "customExchangeRate": {
-     "visible": false
-   },
-   "expectedCloseDate": {
-     "visible": false
-   },
-   "layout": {
-     "visible": false
-   },
-   "metadata": {
-     "visible": false
-   },
-   "pdfUrl": {
-     "visible": false
-   },
-   "relatedUser": {
-     "visible": false
-   },
-   "referenceNumber": {
-     "visible": false
-   },
-   "signers": {
-     "visible": false
-   },
-   "source": {
-     "visible": false
-   },
-   "stage": {
-     "visible": false
-   },
-   "stagePosition": {
-     "visible": false
-   },
-   "widget": {
-     "visible": false
-   },
-   "workingTime": {
-     "visible": false
-   },
-   "address": {
-    "visible": true
+  "name": {
+    "isLeadvisible": false
+  },
+  "department": {
+    "isLeadvisible": false
+  },  
+  "rating": {
+    "isLeadvisible": false
+  },  
+  "status": {
+    "isLeadvisible": false
+  },    
+  "layout": {
+    "visible": false
+  },
+  "address": {
+   "visible": true
   },
   "apps": {
     "visible": false
@@ -84,12 +60,18 @@
   "createdBy": {
     "visible": true
   },
-  "department": {
+  "customExchangeRate": {
     "visible": false
-  },
+  }, 
+  "currency": {
+    "visible": true
+  },    
   "email": {
     "visible": true
   },
+  "expectedCloseDate": {
+    "visible": false
+  },  
   "firstName": {
     "visible": true
   },
@@ -97,7 +79,7 @@
     "visible": false
   },
   "identificationNumber": {
-    "visible": true
+    "visible": false
   },
   "industry": {
     "visible": false
@@ -120,29 +102,26 @@
   "mobile": {
     "visible": true
   },
-  "name": {
-    "visible": true
-  },
   "password": {
     "visible": false
   },
   "paymentResponsibles": {
     "visible": false
   },
+  "pdfUrl": {
+    "visible": false
+  },  
   "permission": {
     "visible": false
   },
   "phone": {
-    "visible": true
+    "visible": false
   },
   "position": {
     "visible": true
   },
   "postal": {
     "visible": false
-  },
-  "rating": {
-    "visible": true
   },
   "readOnly": {
     "visible": false
@@ -153,6 +132,9 @@
   "referenceNumber": {
     "visible": false
   },
+  "relatedUser": {
+    "visible": false
+  },  
   "renewalAmount": {
     "visible": false
   },
@@ -166,11 +148,14 @@
     "visible": false
   },
   "shareWith": {
-    "visible": true
+    "visible": false
   },
   "shortname": {
     "visible": false
   },
+  "signers": {
+    "visible": false
+  }, 
   "size": {
     "visible": false
   },
@@ -195,14 +180,11 @@
   "state": {
     "visible": false
   },
-  "status": {
-    "visible": true
-  },
   "street": {
     "visible": true
   },
   "taxId": {
-    "visible": true
+    "visible": false
   },
   "type": {
     "visible": false
@@ -220,7 +202,13 @@
     "visible": false
   },
   "website": {
-    "visible": true
+    "visible": false
+  },
+  "widget": {
+    "visible": false
+  },
+  "workingTime": {
+    "visible": false
   }  
  },
  "lead": {
@@ -282,7 +270,7 @@
      "visible": false
    },
    "identificationNumber": {
-     "visible": true
+     "visible": false
    },
    "industry": {
      "visible": false
@@ -318,7 +306,7 @@
      "visible": false
    },
    "phone": {
-     "visible": true
+     "visible": false
    },
    "position": {
      "visible": true
@@ -327,7 +315,7 @@
      "visible": false
    },
    "rating": {
-     "visible": true
+     "visible": false
    },
    "readOnly": {
      "visible": false
@@ -351,7 +339,7 @@
      "visible": false
    },
    "shareWith": {
-     "visible": true
+     "visible": false
    },
    "shortname": {
      "visible": false
@@ -381,13 +369,13 @@
      "visible": false
    },
    "status": {
-     "visible": true
-   },
+    "visible": false
+  },   
    "street": {
      "visible": true
    },
    "taxId": {
-     "visible": true
+     "visible": false
    },
    "type": {
      "visible": false
@@ -405,7 +393,7 @@
      "visible": false
    },
    "website": {
-     "visible": true
+     "visible": false
    }
  }
 }
