@@ -1,399 +1,414 @@
 {
- "proposal": {
-  "name": {
-    "isLeadvisible": false
+  "proposal": {
+    "name": {
+      "isLeadvisible": false
+    },
+    "department": {
+      "isLeadvisible": false
+    },
+    "rating": {
+      "isLeadvisible": false
+    },
+    "status": {
+      "isLeadvisible": false
+    },
+    "layout": {
+      "visible": false
+    },
+    "address": {
+      "visible": true
+    },
+    "apps": {
+      "visible": false
+    },
+    "assignedTo": {
+      "visible": true
+    },
+    "auth": {
+      "visible": false
+    },
+    "avatars": {
+      "visible": false
+    },
+    "city": {
+      "visible": true
+    },
+    "company": {
+      "visible": true
+    },
+    "companyName": {
+      "visible": true
+    },
+    "companyShortname": {
+      "visible": false
+    },
+    "converted": {
+      "visible": false
+    },
+    "convertedCompany": {
+      "visible": false
+    },
+    "convertedUser": {
+      "visible": false
+    },
+    "country": {
+      "visible": true
+    },
+    "createdAt": {
+      "visible": true
+    },
+    "createdBy": {
+      "visible": true
+    },
+    "customExchangeRate": {
+      "visible": false
+    },
+    "currency": {
+      "visible": true
+    },
+    "email": {
+      "visible": true
+    },
+    "expectedCloseDate": {
+      "visible": false
+    },
+    "firstName": {
+      "visible": true
+    },
+    "home": {
+      "visible": false
+    },
+    "identificationNumber": {
+      "visible": false
+    },
+    "industry": {
+      "visible": false
+    },
+    "lastName": {
+      "visible": true
+    },
+    "legalName": {
+      "visible": false
+    },
+    "logos": {
+      "visible": false
+    },
+    "map": {
+      "visible": false
+    },
+    "metadata": {
+      "visible": false
+    },
+    "mobile": {
+      "visible": true
+    },
+    "password": {
+      "visible": false
+    },
+    "paymentResponsibles": {
+      "visible": false
+    },
+    "pdfUrl": {
+      "visible": false
+    },
+    "pdf1": {
+      "disableHidden": false
+    },
+    "pdf2": {
+      "disableHidden": false
+    },
+    "pdf3": {
+      "disableHidden": false
+    },
+    "pdf4": {
+      "disableHidden": false
+    },
+    "pdf5": {
+      "disableHidden": false
+    },
+    "permission": {
+      "visible": false
+    },
+    "phone": {
+      "visible": false
+    },
+    "position": {
+      "visible": true
+    },
+    "postal": {
+      "visible": false
+    },
+    "readOnly": {
+      "visible": false
+    },
+    "referedBy": {
+      "visible": false
+    },
+    "referenceNumber": {
+      "visible": false
+    },
+    "relatedUser": {
+      "visible": false
+    },
+    "renewalAmount": {
+      "visible": false
+    },
+    "renewalDate": {
+      "visible": false
+    },
+    "resetPassword": {
+      "visible": false
+    },
+    "role": {
+      "visible": false
+    },
+    "shareWith": {
+      "visible": false
+    },
+    "shortname": {
+      "visible": false
+    },
+    "signers": {
+      "visible": false
+    },
+    "size": {
+      "visible": false
+    },
+    "skype": {
+      "visible": false
+    },
+    "source": {
+      "visible": true
+    },
+    "specialObservations": {
+      "visible": true
+    },
+    "stage": {
+      "visible": false
+    },
+    "stagePosition": {
+      "visible": false
+    },
+    "starred": {
+      "visible": false
+    },
+    "state": {
+      "visible": false
+    },
+    "street": {
+      "visible": true
+    },
+    "taxId": {
+      "visible": false
+    },
+    "type": {
+      "visible": false
+    },
+    "updatedAt": {
+      "visible": false
+    },
+    "updatedBy": {
+      "visible": false
+    },
+    "updatedByStage": {
+      "visible": false
+    },
+    "user": {
+      "visible": false
+    },
+    "website": {
+      "visible": false
+    },
+    "widget": {
+      "visible": false
+    },
+    "workingTime": {
+      "visible": false
+    }
   },
-  "department": {
-    "isLeadvisible": false
-  },  
-  "rating": {
-    "isLeadvisible": false
-  },  
-  "status": {
-    "isLeadvisible": false
-  },    
-  "layout": {
-    "visible": false
-  },
-  "address": {
-   "visible": true
-  },
-  "apps": {
-    "visible": false
-  },
-  "assignedTo": {
-    "visible": true
-  },
-  "auth": {
-    "visible": false
-  },
-  "avatars": {
-    "visible": false
-  },
-  "city": {
-    "visible": true
-  },
-  "company": {
-    "visible": true
-  },
-  "companyName": {
-    "visible": true
-  },
-  "companyShortname": {
-    "visible": false
-  },
-  "converted": {
-    "visible": false
-  },
-  "convertedCompany": {
-    "visible": false
-  },
-  "convertedUser": {
-    "visible": false
-  },
-  "country": {
-    "visible": true
-  },
-  "createdAt": {
-    "visible": true
-  },
-  "createdBy": {
-    "visible": true
-  },
-  "customExchangeRate": {
-    "visible": false
-  }, 
-  "currency": {
-    "visible": true
-  },    
-  "email": {
-    "visible": true
-  },
-  "expectedCloseDate": {
-    "visible": false
-  },  
-  "firstName": {
-    "visible": true
-  },
-  "home": {
-    "visible": false
-  },
-  "identificationNumber": {
-    "visible": false
-  },
-  "industry": {
-    "visible": false
-  },
-  "lastName": {
-    "visible": true
-  },
-  "legalName": {
-    "visible": false
-  },
-  "logos": {
-    "visible": false
-  },
-  "map": {
-    "visible": false
-  },
-  "metadata": {
-    "visible": false
-  },
-  "mobile": {
-    "visible": true
-  },
-  "password": {
-    "visible": false
-  },
-  "paymentResponsibles": {
-    "visible": false
-  },
-  "pdfUrl": {
-    "visible": false
-  },  
-  "permission": {
-    "visible": false
-  },
-  "phone": {
-    "visible": false
-  },
-  "position": {
-    "visible": true
-  },
-  "postal": {
-    "visible": false
-  },
-  "readOnly": {
-    "visible": false
-  },
-  "referedBy": {
-    "visible": false
-  },
-  "referenceNumber": {
-    "visible": false
-  },
-  "relatedUser": {
-    "visible": false
-  },  
-  "renewalAmount": {
-    "visible": false
-  },
-  "renewalDate": {
-    "visible": false
-  },
-  "resetPassword": {
-    "visible": false
-  },
-  "role": {
-    "visible": false
-  },
-  "shareWith": {
-    "visible": false
-  },
-  "shortname": {
-    "visible": false
-  },
-  "signers": {
-    "visible": false
-  }, 
-  "size": {
-    "visible": false
-  },
-  "skype": {
-    "visible": false
-  },
-  "source": {
-    "visible": true
-  },
-  "specialObservations": {
-    "visible": true
-  },
-  "stage": {
-    "visible": false
-  },
-  "stagePosition": {
-    "visible": false
-  },
-  "starred": {
-    "visible": false
-  },
-  "state": {
-    "visible": false
-  },
-  "street": {
-    "visible": true
-  },
-  "taxId": {
-    "visible": false
-  },
-  "type": {
-    "visible": false
-  },
-  "updatedAt": {
-    "visible": false
-  },
-  "updatedBy": {
-    "visible": false
-  },
-  "updatedByStage": {
-    "visible": false
-  },
-  "user": {
-    "visible": false
-  },
-  "website": {
-    "visible": false
-  },
-  "widget": {
-    "visible": false
-  },
-  "workingTime": {
-    "visible": false
-  }  
- },
- "lead": {
-   "address": {
-     "visible": true
-   },
-   "apps": {
-     "visible": false
-   },
-   "assignedTo": {
-     "visible": true
-   },
-   "auth": {
-     "visible": false
-   },
-   "avatars": {
-     "visible": false
-   },
-   "city": {
-     "visible": true
-   },
-   "company": {
-     "visible": true
-   },
-   "companyName": {
-     "visible": true
-   },
-   "companyShortname": {
-     "visible": false
-   },
-   "converted": {
-     "visible": false
-   },
-   "convertedCompany": {
-     "visible": false
-   },
-   "convertedUser": {
-     "visible": false
-   },
-   "country": {
-     "visible": true
-   },
-   "createdAt": {
-     "visible": true
-   },
-   "createdBy": {
-     "visible": true
-   },
-   "department": {
-     "visible": false
-   },
-   "email": {
-     "visible": true
-   },
-   "firstName": {
-     "visible": true
-   },
-   "home": {
-     "visible": false
-   },
-   "identificationNumber": {
-     "visible": false
-   },
-   "industry": {
-     "visible": false
-   },
-   "lastName": {
-     "visible": true
-   },
-   "legalName": {
-     "visible": false
-   },
-   "logos": {
-     "visible": false
-   },
-   "map": {
-     "visible": false
-   },
-   "metadata": {
-     "visible": false
-   },
-   "mobile": {
-     "visible": true
-   },
-   "name": {
-     "visible": false
-   },
-   "password": {
-     "visible": false
-   },
-   "paymentResponsibles": {
-     "visible": false
-   },
-   "permission": {
-     "visible": false
-   },
-   "phone": {
-     "visible": false
-   },
-   "position": {
-     "visible": true
-   },
-   "postal": {
-     "visible": false
-   },
-   "rating": {
-     "visible": false
-   },
-   "readOnly": {
-     "visible": false
-   },
-   "referedBy": {
-     "visible": false
-   },
-   "referenceNumber": {
-     "visible": false
-   },
-   "renewalAmount": {
-     "visible": false
-   },
-   "renewalDate": {
-     "visible": false
-   },
-   "resetPassword": {
-     "visible": false
-   },
-   "role": {
-     "visible": false
-   },
-   "shareWith": {
-     "visible": false
-   },
-   "shortname": {
-     "visible": false
-   },
-   "size": {
-     "visible": false
-   },
-   "skype": {
-     "visible": false
-   },
-   "source": {
-     "visible": true
-   },
-   "specialObservations": {
-     "visible": true
-   },
-   "stage": {
-     "visible": false
-   },
-   "stagePosition": {
-     "visible": false
-   },
-   "starred": {
-     "visible": false
-   },
-   "state": {
-     "visible": false
-   },
-   "status": {
-    "visible": false
-  },   
-   "street": {
-     "visible": true
-   },
-   "taxId": {
-     "visible": false
-   },
-   "type": {
-     "visible": false
-   },
-   "updatedAt": {
-     "visible": false
-   },
-   "updatedBy": {
-     "visible": false
-   },
-   "updatedByStage": {
-     "visible": false
-   },
-   "user": {
-     "visible": false
-   },
-   "website": {
-     "visible": false
-   }
- }
+  "lead": {
+    "address": {
+      "visible": true
+    },
+    "apps": {
+      "visible": false
+    },
+    "assignedTo": {
+      "visible": true
+    },
+    "auth": {
+      "visible": false
+    },
+    "avatars": {
+      "visible": false
+    },
+    "city": {
+      "visible": true
+    },
+    "company": {
+      "visible": true
+    },
+    "companyName": {
+      "visible": true
+    },
+    "companyShortname": {
+      "visible": false
+    },
+    "converted": {
+      "visible": false
+    },
+    "convertedCompany": {
+      "visible": false
+    },
+    "convertedUser": {
+      "visible": false
+    },
+    "country": {
+      "visible": true
+    },
+    "createdAt": {
+      "visible": true
+    },
+    "createdBy": {
+      "visible": true
+    },
+    "department": {
+      "visible": false
+    },
+    "email": {
+      "visible": true
+    },
+    "firstName": {
+      "visible": true
+    },
+    "home": {
+      "visible": false
+    },
+    "identificationNumber": {
+      "visible": false
+    },
+    "industry": {
+      "visible": false
+    },
+    "lastName": {
+      "visible": true
+    },
+    "legalName": {
+      "visible": false
+    },
+    "logos": {
+      "visible": false
+    },
+    "map": {
+      "visible": false
+    },
+    "metadata": {
+      "visible": false
+    },
+    "mobile": {
+      "visible": true
+    },
+    "name": {
+      "visible": false
+    },
+    "password": {
+      "visible": false
+    },
+    "paymentResponsibles": {
+      "visible": false
+    },
+    "permission": {
+      "visible": false
+    },
+    "phone": {
+      "visible": false
+    },
+    "position": {
+      "visible": true
+    },
+    "postal": {
+      "visible": false
+    },
+    "rating": {
+      "visible": false
+    },
+    "readOnly": {
+      "visible": false
+    },
+    "referedBy": {
+      "visible": false
+    },
+    "referenceNumber": {
+      "visible": false
+    },
+    "renewalAmount": {
+      "visible": false
+    },
+    "renewalDate": {
+      "visible": false
+    },
+    "resetPassword": {
+      "visible": false
+    },
+    "role": {
+      "visible": false
+    },
+    "shareWith": {
+      "visible": false
+    },
+    "shortname": {
+      "visible": false
+    },
+    "size": {
+      "visible": false
+    },
+    "skype": {
+      "visible": false
+    },
+    "source": {
+      "visible": true
+    },
+    "specialObservations": {
+      "visible": true
+    },
+    "stage": {
+      "visible": false
+    },
+    "stagePosition": {
+      "visible": false
+    },
+    "starred": {
+      "visible": false
+    },
+    "state": {
+      "visible": false
+    },
+    "status": {
+      "visible": false
+    },
+    "street": {
+      "visible": true
+    },
+    "taxId": {
+      "visible": false
+    },
+    "type": {
+      "visible": false
+    },
+    "updatedAt": {
+      "visible": false
+    },
+    "updatedBy": {
+      "visible": false
+    },
+    "updatedByStage": {
+      "visible": false
+    },
+    "user": {
+      "visible": false
+    },
+    "website": {
+      "visible": false
+    }
+  }
 }
