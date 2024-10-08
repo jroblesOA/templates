@@ -230,7 +230,7 @@
     "GET",
     {
       status: "active",
-      roles: ["agent", "admin"],
+      roles: ["agent"],
     },
     null,
     function (response) {
@@ -303,7 +303,6 @@
   }
   );
 
-
   fetchData(
     `https://${domain}/v1/category`,
     "GET",
@@ -345,8 +344,6 @@
   }
   );
 
-
-
       let input = document.querySelector("#mobile");
       let iti = window.intlTelInput(input, {
         separateDialCode: true, // Mostrar solo el prefijo separado del número
@@ -379,10 +376,6 @@
       input.addEventListener("countrychange", function () {
         updateFullPhoneNumber(); // Actualizar la variable global cuando cambie el prefijo
       });
-
-
-
-
    });
 </script>
 
