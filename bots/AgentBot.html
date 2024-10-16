@@ -209,7 +209,7 @@
  window.nodriza.api.proposalbot.generate(opt, function (err, res) {
   success("De clic en aceptar para enviar su cotización...");
   window.location =
-   "https://api.whatsapp.com/send?phone=" + fullPhoneNumber + "&text=Hola " + json.firstName + " " + json.lastName + "%0A%0A" + "Por esta vía le hago llegar la cotización solicitada del " + model.name + ". Puede acceder a ella haciendo click en el siguiente enlace. " + "%0A" + res.url + "%0A%0A" + "Para activar el link en el mensaje de whatsapp recuerde presionar OK en el mensaje de aceptación. El link también se activa al responder el chat o al grabar el número en sus contactos y queda para futuras cotizaciones" + "%0A%0A" + "Quedo a su disposición, para cualquier duda o aclaración.";
+   "https://api.whatsapp.com/send?phone=" + fullPhoneNumber + "&text=Hola " + json.firstName + " " + json.lastName + "%0A%0A" + "Le envio la cotización solicitada. Puede acceder a ella haciendo click en el siguiente enlace: " + "%0A" + res.url + "%0A%0A" + "Para activar el link recuerde presionar OK en el mensaje de aceptación o simplemente responder el chat. Tambien puede grabar el número en sus contactos." + "%0A%0A" + "Quedo atento a cualquier duda o aclaración.";
  });
  }
 
