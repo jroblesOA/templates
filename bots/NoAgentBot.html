@@ -1,577 +1,520 @@
 <title>{{name}}</title>
 <meta charset="utf-8" />
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, shrink-to-fit=no"
-/>
-<link
-  rel="stylesheet"
-  href="//s3.amazonaws.com/cdn.nodriza.io/assets/css/chatbot.automotriz.css"
-/>
-<link
-  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
-  rel="stylesheet"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="//s3.amazonaws.com/cdn.nodriza.io/assets/css/chatbot.automotriz.css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script src="https://s3.amazonaws.com/cdn.nodriza.io/sdk/nodriza@lastest/nodriza-sdk.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
-/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
 <script type="text/javascript">
 
-      /*====== DATOS GLOBALES =========*/
-      var domain = '{{domain}}';
-      var botName = '{{slug}}';
-      const bearerToken = '{{bearerToken}}';
-      const currency = '{{currency}}';
-      const useWebhookHubspot = {{hubspot}};
+ /*====== DATOS GLOBALES =========*/
+ var domain = '{{domain}}';
+ var botName = '{{slug}}';
+ const bearerToken = '{{bearerToken}}';
+ const currency = '{{currency}}';
+ const useWebhookHubspot = {{ hubspot }};
 
-      const customAttributes = [
-          {
-                  "name": "Prolibu",
-                  "idAttribute": "prolibu_select",
-                  "model": "deals",
-                  "value": "CX"
-          },
-          {
-                  "name": "Prolibu Contact",
-                  "idAttribute": "prolibu_contact",
-                  "model": "contacts",
-                  "value": "Desarrollo"
-          },
-    ]
+ const customAttributes = [
+  {
+   "name": "Prolibu",
+   "idAttribute": "prolibu_select",
+   "model": "deals",
+   "value": "CX"
+  },
+  {
+   "name": "Prolibu Contact",
+   "idAttribute": "prolibu_contact",
+   "model": "contacts",
+   "value": "Desarrollo"
+  },
+ ]
 
-      var params = {hostname: domain};
-      window.nodriza = new Nodriza(params);
+ var params = { hostname: domain };
+ window.nodriza = new Nodriza(params);
 
-    //============ ARREGLOS =====================
+ //============ ARREGLOS =====================
 
-    let agentsList = [];
-    let productsList = [];
-    let departmentList = [];
-    let categoriesList = [];
+ let agentsList = [];
+ let productsList = [];
+ let departmentList = [];
+ let categoriesList = [];
 
-    let fullPhoneNumber = '';
+ let fullPhoneNumber = '';
 
-    // ========= FUNCIONES GENERALES ==========
+ // ========= FUNCIONES GENERALES ==========
 
-    function error(msg) {
-        alert(msg);
+ function error(msg) {
+  alert(msg);
+ }
+
+ function success(msg) {
+  alert(msg);
+ }
+
+ function fetchData(url, method, params, headers, successCallback, errorCallback) {
+  $.ajax({
+   url: url,
+   method: method,
+   data: params || {},
+   headers: headers || {},
+   success: successCallback,
+   error: function (jqXHR, textStatus, errorThrown) {
+    console.error("Error en la solicitud:", textStatus, errorThrown);
+    // Llama al callback de error si se proporciona
+    if (errorCallback) {
+     errorCallback(jqXHR);
     }
+   }
+  });
+ }
 
-    function success(msg) {
-        alert(msg);
-    }
+ function validEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+ }
 
-    function fetchData(url, method, params, headers, successCallback, errorCallback) {
-        $.ajax({
-            url: url,
-            method: method,
-            data: params || {},
-            headers: headers || {},
-            success: successCallback,
-            error: function(jqXHR, textStatus, errorThrown) {
-            console.error("Error en la solicitud:", textStatus, errorThrown);
-            // Llama al callback de error si se proporciona
-            if (errorCallback) {
-                errorCallback(jqXHR);
-            }
-        }
-        });
-     }
+ // ========= FUNCION PARA ENVIO DEL FORMULARIO ============
+ function submitForm(e) {
+  e.preventDefault();
+  let fields = $("#contact-form").serializeArray();
+  let json = {};
+  for (let i = 0; i < fields.length; i++) {
+   let itm = fields[i];
+   json[itm.name] = itm.value;
+  }
+  if (json.authorized !== 'on') return error('Por favor acepte nuestras politicas de tratamiento de datos para continuar.');
+  let code = $('#code').val();
+  nodriza.api.confirmationCode.confirm({ code: code }, function (err, results) {
+   if (!_.isEmpty(err)) {
+    alert('Código de confirmación inválido. Se refrescara el formulario.');
+    window.location.reload(); // Recargar la página después de presionar "OK"
+    return;
+   }
+   if (results && results.hash) {
+    json.hash = results.hash;
+    createProposal(json);
+   }
+  });
+ }
 
-    function validEmail (email) {
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
-    }
+ // ========== LOGICA PARA PINTAR DATOS =======================
 
-      // ========= FUNCION PARA ENVIO DEL FORMULARIO ============
-         function submitForm(e) {
-             e.preventDefault();
-             let fields = $("#contact-form").serializeArray();
-             let json = {};
-             for (let i = 0; i < fields.length; i++) {
-                 let itm = fields[i];
-                 json[itm.name] = itm.value;
-             }
-             if (json.authorized !== 'on') return error('Por favor acepte nuestras politicas de tratamiento de datos para continuar.');
-             let code = $('#code').val();
-             nodriza.api.confirmationCode.confirm({code: code}, function (err, results) {
-             if (!_.isEmpty(err)) {
-             alert('Código de confirmación inválido. Se refrescara el formulario.');
-             window.location.reload(); // Recargar la página después de presionar "OK"
-             return;
-             }
-             if (results && results.hash) {
-                 json.hash = results.hash;
-                 createProposal(json);
-             }
-             });
-         }
+ function getAgentOptions() {
+  let options = "";
+  for (let i = 0; i < agentsList.length; i++) {
+   let agent = agentsList[i];
+   options += '<option value="' + agent.email + '">' + agent.firstName + ' ' + agent.lastName + '</option>';
+  }
+  options += '<option value="" selected="selected">AGENTE</option>';
+  return options;
+ }
 
-    // ========== LOGICA PARA PINTAR DATOS =======================
+ function getSelectedProducts() {
+  if (!productsList) {
+   console.error("productsList no está definido");
+   return [];
+  }
+  return productsList.filter((product) => !product.disabled);
+ }
 
-    function getAgentOptions() {
-      let options = "";
-      for (let i = 0; i < agentsList.length; i++) {
-        let agent = agentsList[i];
-        options += '<option value="' + agent.email + '">' + agent.firstName + ' ' + agent.lastName + '</option>';
-      }
-      options += '<option value="" selected="selected">AGENTE</option>';
-      return options;
-    }
+ function getProductsBy(key, values) {
+  let isString;
+  if (typeof values === "string") {
+   values = [values];
+   isString = true;
+  }
+  let products = [];
+  for (let i = 0; i < productsList.length; i++) {
+   let product = productsList[i];
+   for (let j = 0; j < values.length; j++) {
+    let val = values[j];
+    if (product[key] === val) products.push(product);
+   }
+  }
+  return isString ? products[0] : products;
+ }
 
-    function getSelectedProducts() {
-      if (!productsList) {
-        console.error("productsList no está definido");
-        return [];
-      }
-      return productsList.filter((product) => !product.disabled);
-    }
+ function getModelOptions() {
+  let selectedProducts = getSelectedProducts();
+  let options = "";
+  for (let i = 0; i < selectedProducts.length; i++) {
+   let product = selectedProducts[i];
+   options +=
+    '<option value="' + product.sku + '">' + product.name + "</option>";
+  }
+  options += '<option value="" selected="selected">DEFAULT</option>';
+  return options;
+ }
 
-    function getProductsBy(key, values) {
-      let isString;
-      if (typeof values === "string") {
-        values = [values];
-        isString = true;
-      }
-      let products = [];
-      for (let i = 0; i < productsList.length; i++) {
-        let product = productsList[i];
-        for (let j = 0; j < values.length; j++) {
-          let val = values[j];
-          if (product[key] === val) products.push(product);
-        }
-      }
-      return isString ? products[0] : products;
-    }
-
-    function getModelOptions() {
-      let selectedProducts = getSelectedProducts();
-      let options = "";
-      for (let i = 0; i < selectedProducts.length; i++) {
-        let product = selectedProducts[i];
-        options +=
-          '<option value="' + product.sku + '">' + product.name + "</option>";
-      }
-      options += '<option value="" selected="selected">DEFAULT</option>';
-      return options;
-    }
-
-    function changeModel() {
-      let sku = $("#model").val();
-      let model = getProductsBy("sku", sku);
-    }
+ function changeModel() {
+  let sku = $("#model").val();
+  let model = getProductsBy("sku", sku);
+ }
 
 
-      // ===========================================
+ // ===========================================
 
-    function createProposal(json) {
-      // DATOS DEL LEAD
-      let to = {
-        firstName: json.firstName,
-        lastName: json.lastName,
-        mobile: fullPhoneNumber,
-        email: json.email,
-      };
+ function createProposal(json) {
+  // DATOS DEL LEAD
+  let to = {
+   firstName: json.firstName,
+   lastName: json.lastName,
+   mobile: fullPhoneNumber,
+   email: json.email,
+  };
 
-      let model = getProductsBy("sku", json.model);
+  let model = getProductsBy("sku", json.model);
 
-      // PAYLOAD COMPLETO
-      let opt = {
-        chatbot: botName,
-        to: to,
-        doc: {
-          title: "Cotización " + model.name,
-          products: [
-            {
-              id: model.sku,
-              quantity: 1,
-            },
-          ],
-          status: "Ready",
-          currency: currency,
-          metadata: {
-            webhook: useWebhookHubspot,
-            customAttributes: customAttributes
-          },
-          dic: {
-            hash: json.hash,
-          },
-        },
-        emailClient: true,
-        emailAgent: true
-      };
-      window.nodriza.api.proposalbot.generate(opt, function (err, res) {
-        if (err) return error(err);
-        success("De clic en aceptar para ver su cotización...");
-        window.location = res.url;
-      });
-    }
+  // TITULO DE LA PROPUESTA
+  var NombreProducto = model.name;
+  var NombreLead = firstName + lastName;
+  var NombreProducto_NombreLead = model.name + firstName + lastName;
+
+  // PAYLOAD COMPLETO
+  let opt = {
+   chatbot: botName,
+   to: to,
+   doc: {
+    title: "{{tituloFijo}} " + {{tituloVariable}},
+ products: [
+  {
+   id: model.sku,
+   quantity: 1,
+  },
+ ],
+  status: "Ready",
+   currency: currency,
+    metadata: {
+  webhook: useWebhookHubspot,
+   customAttributes: customAttributes
+ },
+ dic: {
+  hash: json.hash,
+    },
+   },
+ emailClient: true,
+  emailAgent: true
+  };
+ window.nodriza.api.proposalbot.generate(opt, function (err, res) {
+  if (err) return error(err);
+  success("De clic en aceptar para ver su cotización...");
+  window.location = res.url;
+ });
+ }
 
 
-   $(document).ready(function () {
+ $(document).ready(function () {
 
-    $('#confirmation-container').append(`<embed id="confirmation-code" height="60px" src='https://${domain}/v1/ConfirmationCode/?color=white&noise=2&size=4'>`);
+  $('#confirmation-container').append(`<embed id="confirmation-code" height="60px" src='https://${domain}/v1/ConfirmationCode/?color=white&noise=2&size=4'>`);
 
   fetchData(
-    `https://${domain}/v1/product`,
-    "GET",
-    { limit: 1000 },
-    { Authorization: `Bearer ${bearerToken}` },
-    function (response) {
+   `https://${domain}/v1/product`,
+   "GET",
+   { limit: 1000 },
+   { Authorization: `Bearer ${bearerToken}` },
+   function (response) {
     if (!response || response.length === 0) {
-      console.error("No se recibieron productos");
-      return;
+     console.error("No se recibieron productos");
+     return;
     }
-      productsList = response.map((product) => {
-        return {
-          pricingList: product.pricingList,
-          sku: product.sku,
-          name: product.name,
-          disabled: product.disabled,
-        };
-      });
+    productsList = response.map((product) => {
+     return {
+      pricingList: product.pricingList,
+      sku: product.sku,
+      name: product.name,
+      disabled: product.disabled,
+     };
+    });
 
-      window.selectedProducts = productsList;
-      $("#model").empty();
-      $("#model").append(getModelOptions());
-      $("#model").select2({
-        placeholder: "Seleccione el Modelo",
-        allowClear: true,
-      });
+    window.selectedProducts = productsList;
+    $("#model").empty();
+    $("#model").append(getModelOptions());
+    $("#model").select2({
+     placeholder: "Seleccione el Modelo",
+     allowClear: true,
+    });
 
-      let $modelOptions = $("#model option");
-      $modelOptions.sort((a, b) => {
-        if ($(a).text() > $(b).text()) return 1;
-        if ($(a).text() < $(b).text()) return -1;
-        return 0;
-      });
+    let $modelOptions = $("#model option");
+    $modelOptions.sort((a, b) => {
+     if ($(a).text() > $(b).text()) return 1;
+     if ($(a).text() < $(b).text()) return -1;
+     return 0;
+    });
 
-      $("#model").html($modelOptions).trigger("change");
-    },
-    function (error) {
+    $("#model").html($modelOptions).trigger("change");
+   },
+   function (error) {
     console.error("Error en la consulta de productos:", error);
-  }
+   }
   );
 
   fetchData(
-    `https://${domain}/v1/category`,
-    "GET",
-    { limit: 1000 },
-    { Authorization: `Bearer ${bearerToken}` },
-    function (response) {
+   `https://${domain}/v1/category`,
+   "GET",
+   { limit: 1000 },
+   { Authorization: `Bearer ${bearerToken}` },
+   function (response) {
     if (!response || response.length === 0) {
-      console.error("No se recibieron productos");
-      return;
+     console.error("No se recibieron productos");
+     return;
     }
-      categoriesList = response.map((category) => {
-        return {
-          type: category.type,
-          slug: category.slug,
-          name: category.name,
-          disabled: category.disabled,
-        };
-      });
+    categoriesList = response.map((category) => {
+     return {
+      type: category.type,
+      slug: category.slug,
+      name: category.name,
+      disabled: category.disabled,
+     };
+    });
 
-      window.selectedCategories = categoriesList;
+    window.selectedCategories = categoriesList;
 
-      $("#pricingList").empty();
-      $("#pricingList").select2({
-        placeholder: "Seleccione el Listado de precios",
-        allowClear: true,
-      });
+    $("#pricingList").empty();
+    $("#pricingList").select2({
+     placeholder: "Seleccione el Listado de precios",
+     allowClear: true,
+    });
 
-      let $categoriesOptions = $("#pricingList option");
-      $categoriesOptions.sort((a, b) => {
-        if ($(a).text() > $(b).text()) return 1;
-        if ($(a).text() < $(b).text()) return -1;
-        return 0;
-      });
+    let $categoriesOptions = $("#pricingList option");
+    $categoriesOptions.sort((a, b) => {
+     if ($(a).text() > $(b).text()) return 1;
+     if ($(a).text() < $(b).text()) return -1;
+     return 0;
+    });
 
-      $("#pricingList").html($categoriesOptions).trigger("change");
-    },
-    function (error) {
+    $("#pricingList").html($categoriesOptions).trigger("change");
+   },
+   function (error) {
     console.error("Error en la consulta de categories:", error);
-  }
+   }
   );
 
-      let input = document.querySelector("#mobile");
-      let iti = window.intlTelInput(input, {
-        separateDialCode: true, // Mostrar solo el prefijo separado del número
-        initialCountry: "auto", // Auto-detectar país por la IP del usuario
-        geoIpLookup: function (callback) {
-          $.get("https://ipinfo.io", function () {}, "jsonp").always(function (
-            resp
-          ) {
-            var countryCode = resp && resp.country ? resp.country : "us";
-            callback(countryCode);
-          });
-        },
-        utilsScript:
-          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js", // Para formatear números
-      });
+  let input = document.querySelector("#mobile");
+  let iti = window.intlTelInput(input, {
+   separateDialCode: true, // Mostrar solo el prefijo separado del número
+   initialCountry: "auto", // Auto-detectar país por la IP del usuario
+   geoIpLookup: function (callback) {
+    $.get("https://ipinfo.io", function () { }, "jsonp").always(function (
+     resp
+    ) {
+     var countryCode = resp && resp.country ? resp.country : "us";
+     callback(countryCode);
+    });
+   },
+   utilsScript:
+    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js", // Para formatear números
+  });
 
-      // Función para actualizar la variable global fullPhoneNumber
-      function updateFullPhoneNumber() {
-        let dialCode = iti.getSelectedCountryData().dialCode; // Obtener el prefijo seleccionado
-        let phoneNumber = $("#mobile").val(); // Obtener el valor del input del número de teléfono
-        fullPhoneNumber = `+${dialCode}${phoneNumber}`; // Concatenar el prefijo y el número
-      }
+  // Función para actualizar la variable global fullPhoneNumber
+  function updateFullPhoneNumber() {
+   let dialCode = iti.getSelectedCountryData().dialCode; // Obtener el prefijo seleccionado
+   let phoneNumber = $("#mobile").val(); // Obtener el valor del input del número de teléfono
+   fullPhoneNumber = `+${dialCode}${phoneNumber}`; // Concatenar el prefijo y el número
+  }
 
-      // Escuchar cambios en el input de teléfono
-      $("#mobile").on("input", function () {
-        updateFullPhoneNumber(); // Actualizar la variable global cada vez que cambie el valor
-      });
+  // Escuchar cambios en el input de teléfono
+  $("#mobile").on("input", function () {
+   updateFullPhoneNumber(); // Actualizar la variable global cada vez que cambie el valor
+  });
 
-      // Escuchar cambios en el prefijo seleccionado (cuando se cambia el país)
-      input.addEventListener("countrychange", function () {
-        updateFullPhoneNumber(); // Actualizar la variable global cuando cambie el prefijo
-      });
-   });
+  // Escuchar cambios en el prefijo seleccionado (cuando se cambia el país)
+  input.addEventListener("countrychange", function () {
+   updateFullPhoneNumber(); // Actualizar la variable global cuando cambie el prefijo
+  });
+ });
 </script>
 
 <style>
-  /* --- Estilos selector 2 --- */
-  .select2-container--default .select2-selection--single {
-    background-color: #f8f9fa;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    padding-left: 8px;
-  }
-  .select2-container--default
-    .select2-selection--single
-    .select2-selection__arrow {
-    height: 36px;
-    right: 8px;
-  }
-  .select2-container--default
-    .select2-selection--single
-    .select2-selection__placeholder {
-    color: #6c757d;
-  }
-  .select2-container--default
-    .select2-results__option--highlighted[aria-selected] {
-    background-color: #007bff;
-    color: white;
-  }
-  .select2.select2-container.select2-container--default {
-    width: 100% !important;
-  }
+ /* --- Estilos selector 2 --- */
+ .select2-container--default .select2-selection--single {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+ }
 
-  /* --- Estilos Selector de pais --- */
-  .iti {
-    width: 100%;
-  }
+ .select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 36px;
+  right: 8px;
+ }
 
-  .form-group input[type="tel"] {
-    padding-left: 60px; /* Ajusta el padding para mostrar el prefijo correctamente */
-  }
+ .select2-container--default .select2-selection--single .select2-selection__placeholder {
+  color: #6c757d;
+ }
 
-  .iti__country-list {
-    background-color: #fff; /* Cambia el fondo a blanco */
-  }
+ .select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #007bff;
+  color: white;
+ }
 
-  .iti__country-list .iti__country {
-    color: #000 !important; /* Cambia el color del texto a negro */
-  }
+ .select2.select2-container.select2-container--default {
+  width: 100% !important;
+ }
 
-  .iti__country-list .iti__country:hover,
-  .iti__country-list .iti__country:focus {
-    background-color: #f0f0f0; /* Cambia el fondo al pasar el ratón */
-  }
+ /* --- Estilos Selector de pais --- */
+ .iti {
+  width: 100%;
+ }
 
-  .iti__selected-dial-code {
-    color: #000 !important; /* Cambia el color del texto a negro */
-  }
+ .form-group input[type="tel"] {
+  padding-left: 60px;
+  /* Ajusta el padding para mostrar el prefijo correctamente */
+ }
 
-  /* --- Estilos Formulario Bot --- */
+ .iti__country-list {
+  background-color: #fff;
+  /* Cambia el fondo a blanco */
+ }
 
-  /* --- Aqui la fuente del cliente --- */
+ .iti__country-list .iti__country {
+  color: #000 !important;
+  /* Cambia el color del texto a negro */
+ }
 
-  #chatbot-automotriz * {
-    font-family: "Roboto" !important;
-  }
-  #chatbot-automotriz {
-    overflow: visible;
-  }
-  #chatbot-automotriz #background {
-    background-position: left;
-  }
-  #chatbot-automotriz footer {
-    bottom: 10px;
-    opacity: 0.7;
-    font-size: 0.7rem;
-  }
+ .iti__country-list .iti__country:hover,
+ .iti__country-list .iti__country:focus {
+  background-color: #f0f0f0;
+  /* Cambia el fondo al pasar el ratón */
+ }
+
+ .iti__selected-dial-code {
+  color: #000 !important;
+  /* Cambia el color del texto a negro */
+ }
+
+ /* --- Estilos Formulario Bot --- */
+ #chatbot-automotriz * {
+  font-family: "{{nombreFuente}}" !important;
+ }
+
+ #chatbot-automotriz {
+  overflow: visible;
+ }
+
+ #chatbot-automotriz #background {
+  background-position: left;
+ }
+
+ #chatbot-automotriz footer {
+  bottom: 10px;
+  opacity: 0.7;
+  font-size: 0.7rem;
+ }
 </style>
 
 <div id="chatbot-automotriz">
-  <div id="logo-container" class="d-md-none">
-    <div class="row">
-      <div class="col-8 brand-name">{{name}}</div>
-      <div class="col-4 padding-right text-right">
-        <!--<img class="img-logo" src="{{logo}}" style="top: 2rem !important;margin: 0px; width: 10rem;">-->
-      </div>
-    </div>
-  </div>
-
-  <div
-    id="image-selecte-mobile"
-    class="d-md-none"
-    style="background-image: url({{bgImg}});"
-  ></div>
-
+ <div id="logo-container" class="d-md-none">
   <div class="row">
-    <div
-      id="background"
-      class="col col-12 col-sm-12 col-md-6 col-md-6 col-xl-8"
-      style="background-image: url({{bgImg}});"
-    >
-      <!--<img class="img-logo" src="{{logo}}" style="top: 2rem !important;margin: 0px; width: 10rem;">-->
-    </div>
-    <!-- FORM -->
-    <form
-      id="contact-form"
-      class="col col-12 col-sm-12 col-md-6 col-xl-4"
-      onsubmit="return submitForm(event);"
-    >
-      <div id="info-container">
-        <div class="row">
-          <div class="col-12 padding-right">
-            <h3 class="d-none d-lg-block">
-              Diligencie los siguientes datos para crear una cotización al
-              instante:
-            </h3>
-            <h5 class="d-md-none">
-              Diligencie los siguientes datos para crear una cotización al
-              instante:
-            </h5>
-          </div>
-        </div>
-        <br />
-        <div class="row">
-          <fieldset class="col-12 padding-right">
-            <h4 class="d-none d-lg-block">Seleccione el Modelo:</h4>
-            <h6 class="d-lg-none">Seleccione el Modelo:</h6>
-            <div class="form-group">
-              <select class="form-control" name="model" id="model" required="">
-                <!-- Options Models Goest Here -->
-              </select>
-            </div>
-
-            <h4 class="d-none d-lg-block">Datos del lead:</h4>
-            <h6 class="d-lg-none">Datos del lead:</h6>
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="text"
-                name="firstName"
-                id="firstName"
-                placeholder="Nombre"
-                required=""
-              />
-            </div>
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="text"
-                name="lastName"
-                id="lastName"
-                placeholder="Apellido"
-                required=""
-              />
-            </div>
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="text"
-                name="mobile"
-                id="mobile"
-                placeholder="Celular"
-                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                required=""
-              />
-            </div>
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="text"
-                name="email"
-                id="email"
-                placeholder="Email"
-                required=""
-              />
-            </div>
-            <div class="form-group">
-              <p id="confirmation-container"></p>
-              <!-- <a href="/" style="font-size: 1.1rem; display: inline-block; vertical-align: top; margin-top: 2.5rem;">Probar con otro número.</a> -->
-            </div>
-            <div class="form-group">
-              <input
-                class="form-control"
-                type="text"
-                name="code"
-                id="code"
-                placeholder="Confirme el siguiente número:"
-                required=""
-              />
-            </div>
-            <!-- <p>LOS CAMPOS MARCADOS CON * SON OBLIGATORIOS</p> -->
-            <div class="form-group checkbox">
-              <label for="promotions">
-                <input
-                  type="checkbox"
-                  name="promotions"
-                  id="promotions"
-                  checked="checked"
-                />
-                Autorizo el uso de mis datos para recibir información sobre
-                promociones, eventos y descuentos.
-              </label>
-            </div>
-            <div class="form-group checkbox">
-              <label for="authorized">
-                <input
-                  type="checkbox"
-                  name="authorized"
-                  id="authorized"
-                  checked="checked"
-                />
-                Autorizo el uso de mis datos según la
-                <a
-                  href="{{terms}}"
-                  target="_blank"
-                  style="text-decoration: underline"
-                  >política de clientes</a
-                >
-              </label>
-            </div>
-            <div class="form-group">
-              <input
-                class="form-control btn btn-primary"
-                id="submit-btn"
-                type="submit"
-                value="COTIZAR AHORA!"
-              />
-            </div>
-          </fieldset>
-        </div>
-      </div>
-    </form>
+   <div class="col-8 brand-name">{{name}}</div>
+   <div class="col-4 padding-right text-right">
+    <!--<img class="img-logo" src="{{logo}}" style="top: 2rem !important;margin: 0px; width: 10rem;">-->
+   </div>
   </div>
-  <!-- Footer -->
-  <footer class="row" style="font-size: 12px; padding-left: 2%; opacity: 0.7">
-    <!--<p id="copyright">
+ </div>
+
+ <div id="image-selecte-mobile" class="d-md-none" style="background-image: url({{bgImg}});"></div>
+
+ <div class="row">
+  <div id="background" class="col col-12 col-sm-12 col-md-6 col-md-6 col-xl-8"
+   style="background-image: url({{bgImg}});">
+   <!--<img class="img-logo" src="{{logo}}" style="top: 2rem !important;margin: 0px; width: 10rem;">-->
+  </div>
+  <!-- FORM -->
+  <form id="contact-form" class="col col-12 col-sm-12 col-md-6 col-xl-4" onsubmit="return submitForm(event);">
+   <div id="info-container">
+    <div class="row">
+     <div class="col-12 padding-right">
+      <h3 class="d-none d-lg-block">
+       Diligencie los siguientes datos para crear una cotización al
+       instante:
+      </h3>
+      <h5 class="d-md-none">
+       Diligencie los siguientes datos para crear una cotización al
+       instante:
+      </h5>
+     </div>
+    </div>
+    <br />
+    <div class="row">
+     <fieldset class="col-12 padding-right">
+      <h4 class="d-none d-lg-block">Seleccione el Modelo:</h4>
+      <h6 class="d-lg-none">Seleccione el Modelo:</h6>
+      <div class="form-group">
+       <select class="form-control" name="model" id="model" required="">
+        <!-- Options Models Goest Here -->
+       </select>
+      </div>
+
+      <h4 class="d-none d-lg-block">Datos del lead:</h4>
+      <h6 class="d-lg-none">Datos del lead:</h6>
+      <div class="form-group">
+       <input class="form-control" type="text" name="firstName" id="firstName" placeholder="Nombre" required="" />
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Apellido" required="" />
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="mobile" id="mobile" placeholder="Celular"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '');" required="" />
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="email" id="email" placeholder="Email" required="" />
+      </div>
+      <div class="form-group">
+       <p id="confirmation-container"></p>
+       <!-- <a href="/" style="font-size: 1.1rem; display: inline-block; vertical-align: top; margin-top: 2.5rem;">Probar con otro número.</a> -->
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="code" id="code" placeholder="Confirme el siguiente número:"
+        required="" />
+      </div>
+      <!-- <p>LOS CAMPOS MARCADOS CON * SON OBLIGATORIOS</p> -->
+      <div class="form-group checkbox">
+       <label for="promotions">
+        <input type="checkbox" name="promotions" id="promotions" checked="checked" />
+        Autorizo el uso de mis datos para recibir información sobre
+        promociones, eventos y descuentos.
+       </label>
+      </div>
+      <div class="form-group checkbox">
+       <label for="authorized">
+        <input type="checkbox" name="authorized" id="authorized" checked="checked" />
+        Autorizo el uso de mis datos según la
+        <a href="{{terms}}" target="_blank" style="text-decoration: underline">política de clientes</a>
+       </label>
+      </div>
+      <div class="form-group">
+       <input class="form-control btn btn-primary" id="submit-btn" type="submit" value="COTIZAR AHORA!" />
+      </div>
+     </fieldset>
+    </div>
+   </div>
+  </form>
+ </div>
+ <!-- Footer -->
+ <footer class="row" style="font-size: 12px; padding-left: 2%; opacity: 0.7">
+  <!--<p id="copyright">
         Las fotografías son de referencia, el modelo para Colombia puede variar.<br>©2023 Todos los derechos reservados.
      </p> -->
-  </footer>
+ </footer>
+ <script>
+  function decodeHTMLEntities(text) {
+   var textarea = document.createElement('textarea');
+   textarea.innerHTML = text;
+   return textarea.value;
+  }
+  const encodedCSS = `{{fuente}}`
+  const decodedCSS = decodeHTMLEntities(encodedCSS);
+  const styleTag = document.querySelector('style');
+  styleTag.innerHTML += '\n' + decodedCSS;
+ </script>
 </div>
