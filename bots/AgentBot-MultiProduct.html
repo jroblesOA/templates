@@ -1,0 +1,702 @@
+<title>{{name}}</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link rel="stylesheet" href="//s3.amazonaws.com/cdn.nodriza.io/assets/css/chatbot.automotriz.css" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://s3.amazonaws.com/cdn.nodriza.io/sdk/nodriza@lastest/nodriza-sdk.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+<script type="text/javascript">
+
+ /*====== DATOS GLOBALES =========*/
+ var domain = '{{domain}}';
+ var botName = '{{slug}}';
+ const bearerToken = '{{bearerToken}}';
+ const currency = '{{currency}}';
+ const useWebhookHubspot = {{ hubspot }};
+ const rolesString = "{{rolesAgentes}}";
+ const rolesAgentes = {roles: rolesString.split(', ').map(role => role.trim())};
+
+ const isMultiple = true
+ const activeQuantity = true 
+
+ const customAttributes = [
+  {
+   "name": "Prolibu",
+   "idAttribute": "prolibu_select",
+   "model": "deals",
+   "value": "CX"
+  },
+  {
+   "name": "Prolibu Contact",
+   "idAttribute": "prolibu_contact",
+   "model": "contacts",
+   "value": "Desarrollo"
+  },
+ ]
+
+ var params = { hostname: domain };
+ window.nodriza = new Nodriza(params);
+
+ //============ ARREGLOS =====================
+
+ let agentsList = [];
+ let productsList = [];
+ let departmentList = [];
+ let categoriesList = [];
+
+ let fullPhoneNumber = '';
+
+ // ========= FUNCIONES GENERALES ==========
+
+ function error(msg) {
+  alert(msg);
+ }
+
+ function success(msg) {
+  alert(msg);
+ }
+
+ function fetchData(url, method, params, headers, successCallback, errorCallback) {
+  $.ajax({
+   url: url,
+   method: method,
+   data: params || {},
+   headers: headers || {},
+   success: successCallback,
+   error: function (jqXHR, textStatus, errorThrown) {
+    console.error("Error en la solicitud:", textStatus, errorThrown);
+    // Llama al callback de error si se proporciona
+    if (errorCallback) {
+     errorCallback(jqXHR);
+    }
+   }
+  });
+ }
+
+ function validEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+ }
+
+ // ========= FUNCION PARA ENVIO DEL FORMULARIO ============
+ function submitForm(e) {
+  e.preventDefault();
+  let fields = $("#contact-form").serializeArray();
+  let json = {};
+  for (let i = 0; i < fields.length; i++) {
+   let itm = fields[i];
+   json[itm.name] = itm.value;
+  }
+  if (json.authorized !== 'on') return error('Por favor acepte nuestras politicas de tratamiento de datos para continuar.');
+  let code = $('#code').val();
+  nodriza.api.confirmationCode.confirm({ code: code }, function (err, results) {
+   if (!_.isEmpty(err)) {
+    alert('Código de confirmación inválido. Se refrescara el formulario.');
+    window.location.reload(); // Recargar la página después de presionar "OK"
+    return;
+   }
+   if (results && results.hash) {
+    json.hash = results.hash;
+    createProposal(json);
+   }
+  });
+ }
+
+ // ========== LOGICA PARA PINTAR DATOS =======================
+
+ function getAgentOptions() {
+  let options = "";
+  for (let i = 0; i < agentsList.length; i++) {
+   let agent = agentsList[i];
+   options += '<option value="' + agent.email + '">' + agent.firstName + ' ' + agent.lastName + '</option>';
+  }
+  options += '<option value="" selected="selected">AGENTE</option>';
+  return options;
+ }
+
+ function getSelectedProducts() {
+  if (!productsList) {
+   console.error("productsList no está definido");
+   return [];
+  }
+  return productsList.filter((product) => !product.disabled);
+ }
+
+ function getProductsBy(key, values) {
+  let isString;
+  if (typeof values === "string") {
+   values = [values];
+   isString = true;
+  }
+  let products = [];
+  for (let i = 0; i < productsList.length; i++) {
+   let product = productsList[i];
+   for (let j = 0; j < values.length; j++) {
+    let val = values[j];
+    if (product[key] === val) products.push(product);
+   }
+  }
+  return isString ? products[0] : products;
+ }
+
+ function getModelOptions() {
+  let selectedProducts = getSelectedProducts();
+  let options = "";
+  for (let i = 0; i < selectedProducts.length; i++) {
+   let product = selectedProducts[i];
+   options +=
+    '<option value="' + product.sku + '">' + product.name + "</option>";
+  }
+  options += '<option value="">Seleccione un producto</option>';
+  return options;
+ }
+
+ function changeModel() {
+  let sku = $("#model").val();
+  let model = getProductsBy("sku", sku);
+ }
+
+ // ===========================================
+
+ function createProposal(json) {
+  const agent = $("#agent").val();
+
+  // DATOS DEL LEAD
+  let to = {
+   firstName: json.firstName,
+   lastName: json.lastName,
+   mobile: fullPhoneNumber,
+   email: json.email,
+   agent: agent,
+  };
+
+	// Construir la lista de productos
+	let selectedModels = $('#model').val(); // Obtener los modelos seleccionados
+	let products = [];
+			
+	if (selectedModels && selectedModels.length > 0) {
+	    selectedModels.forEach(function (model) {
+	        let quantity = 1; // Valor por defecto para quantity
+			
+	        // Si activeQuantity está activo, obtener la cantidad ingresada para cada modelo
+	        if (activeQuantity) {
+	            let quantityInput = $(`#input-${model}`).val();
+	            if (quantityInput && !isNaN(quantityInput)) {
+	                quantity = parseInt(quantityInput, 10); // Convertir a número entero
+	            }
+	        }
+			
+	        // Agregar el producto al array de productos
+	        products.push({
+	            id: model,
+	            quantity: quantity
+	        });
+	    });
+	}  
+
+  let model = getProductsBy("sku", selectedModels[0]);
+
+  // TITULO DE LA PROPUESTA
+  var NombreProducto = model.name;
+  var NombreLead = firstName + lastName;
+  var NombreProducto_NombreLead = model.name + firstName + lastName;
+
+  // PAYLOAD COMPLETO
+  let opt = {
+    chatbot: botName,
+    to: to,
+    doc: {
+      title: "{{title}} " + {{tituloVariable}},
+      products: products,
+      status: "Ready",
+      currency: currency,
+      metadata: {
+        webhook: useWebhookHubspot,
+        customAttributes: customAttributes
+      },
+      dic: {
+        hash: json.hash,
+      }
+    },
+    emailClient: true,
+    emailAgent: true,
+    assignedAgentEmail: agent,
+    };
+  window.nodriza.api.proposalbot.generate(opt, function (err, res) {
+    success("De clic en aceptar para enviar su cotización...");
+    window.location =
+    "https://api.whatsapp.com/send?phone=" + fullPhoneNumber + "&text=Hola " + json.firstName + " " + json.lastName + "%0A%0A" + "Le envio la cotización solicitada. Puede acceder a ella haciendo click en el siguiente enlace: " + "%0A" + res.url + "%0A%0A" + "Para activar el link recuerde presionar OK en el mensaje de aceptación o simplemente responder el chat. Tambien puede grabar el número en sus contactos." + "%0A%0A" + "Quedo atento a cualquier duda o aclaración.";
+  });
+ }
+
+
+ $(document).ready(function () {
+
+  $('#confirmation-container').append(`<embed id="confirmation-code" height="60px" src='https://${domain}/v1/ConfirmationCode/?color=white&noise=2&size=4'>`);
+
+  fetchData(
+   `https://${domain}/v1/publicservices/getAgents`,
+   "GET",
+   {
+    status: "active",
+    roles: rolesAgentes.roles,
+   },
+   null,
+   function (response) {
+    agentsList = response.map((agent) => {
+     return {
+      id: agent.id,
+      firstName: agent.firstName,
+      lastName: agent.lastName,
+      email: agent.email,
+     };
+    });
+
+    $("#agent").empty().append(getAgentOptions());
+    $("#agent").select2({
+     placeholder: "Seleccione el Asesor",
+     allowClear: true,
+    });
+
+    let $agentOptions = $("#agent option");
+    $agentOptions.sort((a, b) => {
+     if ($(a).text() > $(b).text()) return 1;
+     if ($(a).text() < $(b).text()) return -1;
+     return 0;
+    });
+    $("#agent").html($agentOptions).trigger("change");
+   },
+   function (error) {
+    console.error("Error en la consulta de agentes:", error);
+   }
+  );
+
+  fetchData(
+   `https://${domain}/v1/product`,
+   "GET",
+   { limit: 1000 },
+   { Authorization: `Bearer ${bearerToken}` },
+   function (response) {
+    if (!response || response.length === 0) {
+     console.error("No se recibieron productos");
+     return;
+    }
+    productsList = response.map((product) => {
+     return {
+      pricingList: product.pricingList,
+      sku: product.sku,
+      name: product.name,
+      disabled: product.disabled,
+     };
+    });
+
+    window.selectedProducts = productsList;
+		$('#model').empty();
+		$('#model').append(getModelOptions());
+		$('#model').select2({
+		    placeholder: "Seleccione el Modelo",
+		    allowClear: true,
+		    multiple: isMultiple
+		}).on('select2:unselecting', function(e) {
+		    // Solo prevenir el enfoque automático cuando se está deseleccionando un producto
+		    setTimeout(() => {
+		        $('#model').select2('open'); // Reabrir el menú después de deseleccionar
+		    }, 1);
+		}).on('select2:select', function(e) {
+		    // Si se selecciona un producto, permitir que el menú funcione normalmente
+		    $('#model').off('select2:unselecting');
+		});
+
+    let $modelOptions = $("#model option");
+    $modelOptions.sort((a, b) => {
+     if ($(a).text() > $(b).text()) return 1;
+     if ($(a).text() < $(b).text()) return -1;
+     return 0;
+    });
+
+    //$("#model").html($modelOptions).trigger("change");
+   },
+   function (error) {
+    console.error("Error en la consulta de productos:", error);
+   }
+  );
+
+  $('#model').on('change', function () {
+		  const selectedModels = $(this).val();
+		  const quantitiesDiv = $("#quantities");
+				
+		  if (selectedModels && selectedModels.length > 0 && isMultiple) {
+		      if (!activeQuantity) return;
+				
+		      selectedModels.forEach(function (model) {
+              // Obtener el texto del modelo en lugar del value
+              const modelText = $(`#model option[value="${model}"]`).text();
+		          // Verificar si ya existe el campo de cantidad para el modelo seleccionado
+		          if ($(`#quantity-${model}`).length === 0) {
+		              // Si no existe, crear el campo de cantidad
+		              const quantityInputHtml = `
+		                  <div class="quantity-input" id="quantity-${model}">
+		                      <label for="input-${model}">Cantidad para ${modelText}:</label>
+		                      <input type="number" id="input-${model}" name="input-${model}" data-model="${model}" min="1" value="1" required>
+		                  </div>
+		              `;
+		              quantitiesDiv.append(quantityInputHtml);
+		          }
+		      });
+				
+		      // Remover los campos de cantidad para los modelos que ya no están seleccionados
+		      $(".quantity-input").each(function () {
+		          const model = $(this).find('input').data('model');
+		          if (!selectedModels.includes(model)) {
+		              $(this).remove();
+		          }
+		      });
+		  } else {
+		      // Si no hay modelos seleccionados, limpiar el contenedor de cantidades
+		      quantitiesDiv.empty();
+		  }
+	});
+
+  fetchData(
+   `https://${domain}/v1/category`,
+   "GET",
+   { limit: 1000 },
+   { Authorization: `Bearer ${bearerToken}` },
+   function (response) {
+    if (!response || response.length === 0) {
+     console.error("No se recibieron productos");
+     return;
+    }
+    categoriesList = response.map((category) => {
+     return {
+      type: category.type,
+      slug: category.slug,
+      name: category.name,
+      disabled: category.disabled,
+     };
+    });
+
+    window.selectedCategories = categoriesList;
+
+    $("#pricingList").empty();
+    $("#pricingList").select2({
+     placeholder: "Seleccione el Listado de precios",
+     allowClear: true,
+    });
+
+    let $categoriesOptions = $("#pricingList option");
+    $categoriesOptions.sort((a, b) => {
+     if ($(a).text() > $(b).text()) return 1;
+     if ($(a).text() < $(b).text()) return -1;
+     return 0;
+    });
+
+    $("#pricingList").html($categoriesOptions).trigger("change");
+   },
+   function (error) {
+    console.error("Error en la consulta de categories:", error);
+   }
+  );
+
+  let input = document.querySelector("#mobile");
+  let iti = window.intlTelInput(input, {
+   separateDialCode: true, // Mostrar solo el prefijo separado del número
+   initialCountry: "auto", // Auto-detectar país por la IP del usuario
+   geoIpLookup: function (callback) {
+    $.get("https://ipinfo.io", function () { }, "jsonp").always(function (
+     resp
+    ) {
+     var countryCode = resp && resp.country ? resp.country : "us";
+     callback(countryCode);
+    });
+   },
+   utilsScript:
+    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js", // Para formatear números
+  });
+
+  // Función para actualizar la variable global fullPhoneNumber
+  function updateFullPhoneNumber() {
+   let dialCode = iti.getSelectedCountryData().dialCode; // Obtener el prefijo seleccionado
+   let phoneNumber = $("#mobile").val(); // Obtener el valor del input del número de teléfono
+   fullPhoneNumber = `+${dialCode}${phoneNumber}`; // Concatenar el prefijo y el número
+  }
+
+  // Escuchar cambios en el input de teléfono
+  $("#mobile").on("input", function () {
+   updateFullPhoneNumber(); // Actualizar la variable global cada vez que cambie el valor
+  });
+
+  // Escuchar cambios en el prefijo seleccionado (cuando se cambia el país)
+  input.addEventListener("countrychange", function () {
+   updateFullPhoneNumber(); // Actualizar la variable global cuando cambie el prefijo
+  });
+ });
+</script>
+
+<style>
+ /* --- Estilos selector 2 --- */
+ .select2-container--default .select2-selection--single {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+ }
+
+ .select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 36px;
+  right: 8px;
+ }
+
+ .select2-container--default .select2-selection--single .select2-selection__placeholder {
+  color: #6c757d;
+ }
+
+ .select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #007bff;
+  color: white;
+ }
+
+ .select2.select2-container.select2-container--default {
+  width: 100%;
+ }
+
+ /* --- Multiple --- */
+        .select2-selection--multiple {
+				    height: auto !important; /* Asegúrate de que no sea un textarea */
+				    min-height: 38px; /* Ajusta la altura mínima */
+				    background-color: #fff; /* Fondo blanco del select */
+				}
+				
+				.select2-selection--multiple .select2-selection__choice {
+				    background-color: #007bff !important; /* Fondo azul para las opciones seleccionadas */
+				    color: white !important; /* Texto blanco */
+				    border: 1px solid #007bff !important; /* Borde azul */
+				    padding: 5px; /* Espaciado */
+				    border-radius: 4px; /* Bordes redondeados */
+				    margin-right: 5px; /* Separación entre las etiquetas seleccionadas */
+				}
+				
+				.select2-selection--multiple .select2-selection__choice__remove {
+				    color: white !important; /* Color blanco para el icono de eliminar */
+				    margin-right: 5px; /* Espacio antes del texto */
+				}
+				
+				.select2-selection--multiple .select2-selection__choice__remove:hover {
+				    color: red !important; /* Cambia el color al pasar el ratón por encima del icono de eliminar */
+				}
+
+        .select2-search.select2-search--inline .select2-search__field::-webkit-scrollbar-thumb {
+            background: none !important;
+            border: none !important;
+        }
+
+        button.select2-selection__clear {
+          padding-right: 5px !important; 
+        }
+				
+				.quantity-input input {
+					border-radius: 5px;
+			    padding: 5px;
+			    width: 50px;
+				} 
+				#chatbot-automotriz textarea {
+					 resize: none !important;
+				}        
+				#quantities {
+				    max-height: 200px; /* Altura máxima para el contenedor */
+				    overflow-y: auto; /* Habilita el scroll vertical si el contenido excede la altura máxima */
+				    margin-top: 10px; /* Espaciado entre el contenedor y el resto del contenido */
+				}        
+
+ /* --- Estilos Selector de pais --- */
+ .iti {
+  width: 100%;
+ }
+
+ .form-group input[type="tel"] {
+  padding-left: 60px;
+ }
+
+ .iti__country-list {
+  background-color: #fff;
+ }
+
+ .iti__country-list .iti__country {
+  color: #000 !important;
+ }
+
+ .iti__country-list .iti__country:hover,
+ .iti__country-list .iti__country:focus {
+  background-color: #f0f0f0;
+ }
+
+ .iti__selected-dial-code {
+  color: #000 !important;
+ }
+
+				/* Personalizar el scrollbar para todos los elementos en la página */
+				::-webkit-scrollbar {
+				    width: 8px; /* Ancho del scroll */
+				}
+				
+				::-webkit-scrollbar-track {
+				    background: #f1f1f1; /* Color de fondo del track (canal) */
+				}
+				
+				::-webkit-scrollbar-thumb {
+				    background-color: #000; /* Color del scroll (negro) */
+				    border-radius: 10px; /* Bordes redondeados */
+				    border: 2px solid #f1f1f1; /* Espacio alrededor del scroll */
+				}
+				
+				/* Opcional: Cambiar el color del scroll al pasar el ratón */
+				::-webkit-scrollbar-thumb:hover {
+				    background-color: #555; /* Color más oscuro al pasar el ratón */
+				}
+				
+				#chatbot-automotriz [type=search] {
+					  margin-top: 6px;
+    				margin-left: 10px;
+				} 
+
+ /* --- Estilos Formulario Bot --- */
+ #chatbot-automotriz * {
+  font-family: "{{nombreFuente}}" !important;
+ }
+
+ #chatbot-automotriz {
+  overflow: visible;
+ }
+
+ #chatbot-automotriz #background {
+  background-position: left;
+ }
+
+ #chatbot-automotriz footer {
+  bottom: 10px;
+  opacity: 0.7;
+  font-size: 0.7rem;
+ }
+</style>
+
+<div id="chatbot-automotriz">
+ <div id="logo-container" class="d-md-none">
+  <div class="row">
+   <div class="col-8 brand-name">{{name}}</div>
+   <div class="col-4 padding-right text-right">
+    <!--<img class="img-logo" src="{{logo}}" style="top: 2rem !important;margin: 0px; width: 10rem;">-->
+   </div>
+  </div>
+ </div>
+
+ <div id="image-selecte-mobile" class="d-md-none" style="background-image: url({{bgImg}});"></div>
+
+ <div class="row">
+  <div id="background" class="col col-12 col-sm-12 col-md-6 col-md-6 col-xl-8"
+   style="background-image: url({{bgImg}});">
+   <!--<img class="img-logo" src="{{logo}}" style="top: 2rem !important;margin: 0px; width: 10rem;">-->
+  </div>
+  <!-- FORM -->
+  <form id="contact-form" class="col col-12 col-sm-12 col-md-6 col-xl-4" onsubmit="return submitForm(event);">
+   <div id="info-container">
+    <div class="row">
+     <div class="col-12 padding-right">
+      <h3 class="d-none d-lg-block">
+       Diligencie los siguientes datos para crear una cotización al instante:
+      </h3>
+      <h5 class="d-md-none">
+       Diligencie los siguientes datos para crear una cotización al instante:
+      </h5>
+     </div>
+    </div>
+    <br />
+    <div class="row">
+     <fieldset class="col-12 padding-right">
+      <div class="form-group">
+       <h4 class="d-none d-lg-block">Seleccione un Asesor:</h4>
+       <h6 class="d-lg-none">Seleccione un Asesor:</h6>
+       <select class="form-control" name="agent" id="agent" required="">
+        <!-- Options Agents Goest Here -->
+       </select>
+      </div>
+
+      <h4 class="d-none d-lg-block">Seleccione el Modelo:</h4>
+      <h6 class="d-lg-none">Seleccione el Modelo:</h6>
+      <div class="form-group">
+       <select class="form-control" name="model" id="model" multiple="multiple" required="">
+        <!-- Options Models Goest Here -->
+       </select>
+      </div>
+      <div class="form-group">
+        <div id="quantities"></div>
+      </div>      
+
+      <h4 class="d-none d-lg-block">Datos del lead:</h4>
+      <h6 class="d-lg-none">Datos del lead:</h6>
+      <div class="form-group">
+       <input class="form-control" type="text" name="firstName" id="firstName" placeholder="Nombre" required="" />
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Apellido" required="" />
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="mobile" id="mobile" placeholder="Celular" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required="" />
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="email" id="email" placeholder="Email" required="" />
+      </div>
+      <div class="form-group">
+       <p id="confirmation-container"></p>
+       <!-- <a href="/" style="font-size: 1.1rem; display: inline-block; vertical-align: top; margin-top: 2.5rem;">Probar con otro número.</a> -->
+      </div>
+      <div class="form-group">
+       <input class="form-control" type="text" name="code" id="code" placeholder="Confirme el siguiente número:"
+        required="" />
+      </div>
+      <!-- <p>LOS CAMPOS MARCADOS CON * SON OBLIGATORIOS</p> -->
+      <div class="form-group checkbox">
+       <label for="promotions">
+        <input type="checkbox" name="promotions" id="promotions" checked="checked" />
+        Autorizo el uso de mis datos para recibir información sobre promociones, eventos y descuentos.
+       </label>
+      </div>
+      <div class="form-group checkbox">
+       <label for="authorized">
+        <input type="checkbox" name="authorized" id="authorized" checked="checked" /> Autorizo el uso de mis datos según la <a href="{{terms}}" target="_blank" style="text-decoration: underline">política de clientes</a>
+       </label>
+      </div>
+      <div class="form-group">
+       <input class="form-control btn btn-primary" id="submit-btn" type="submit" value="COTIZAR AHORA!" />
+      </div>
+     </fieldset>
+    </div>
+   </div>
+  </form>
+ </div>
+ <!-- Footer -->
+ <footer class="row" style="font-size: 12px; padding-left: 2%; opacity: 0.7">
+  <!--<p id="copyright">
+        Las fotografías son de referencia, el modelo para Colombia puede variar.<br>©2023 Todos los derechos reservados.
+     </p> -->
+ </footer>
+ <script>
+  function decodeHTMLEntities(text) {
+   var textarea = document.createElement('textarea');
+   textarea.innerHTML = text;
+   return textarea.value;
+  }
+  const encodedCSS = `{{fuente}}`
+  const decodedCSS = decodeHTMLEntities(encodedCSS);
+  const styleTag = document.querySelector('style');
+  styleTag.innerHTML += '\n' + decodedCSS;
+ </script>
+</div>
