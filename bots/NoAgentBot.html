@@ -109,7 +109,9 @@
   let options = "";
   for (let i = 0; i < agentsList.length; i++) {
    let agent = agentsList[i];
-   options += '<option value="' + agent.email + '">' + agent.firstName + ' ' + agent.lastName + '</option>';
+   if (agent.email !== 'aosorio@nodriza.io') {
+      options += '<option value="' + agent.email + '">' + agent.firstName + ' ' + agent.lastName + '</option>';
+    }
   }
   options += '<option value="" selected="selected">AGENTE</option>';
   return options;
