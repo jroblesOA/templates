@@ -173,8 +173,8 @@
 
   // TITULO DE LA PROPUESTA
   var NombreProducto = model.name;
-  var NombreLead = firstName + lastName;
-  var NombreProducto_NombreLead = model.name + firstName + lastName;
+  var NombreLead = json.firstName + " " + json.lastName;
+  var NombreProducto_NombreLead = model.name + " - " + json.firstName + " " + json.lastName;
 
   // PAYLOAD COMPLETO
   let opt = {

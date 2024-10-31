@@ -22,6 +22,9 @@
  const rolesString = "{{rolesAgentes}}";
  const rolesAgentes = {roles: rolesString.split(', ').map(role => role.trim())};
 
+ const isMultiple = true
+ const activeQuantity = true 
+
  const customAttributes = [
   {
    "name": "Prolibu",
@@ -150,7 +153,7 @@
    options +=
     '<option value="' + product.sku + '">' + product.name + "</option>";
   }
-  options += '<option value="" selected="selected">DEFAULT</option>';
+  options += '<option value="">Seleccione un producto</option>';
   return options;
  }
 
@@ -173,7 +176,31 @@
    agent: agent,
   };
 
-  let model = getProductsBy("sku", json.model);
+	// Construir la lista de productos
+	let selectedModels = $('#model').val(); // Obtener los modelos seleccionados
+	let products = [];
+			
+	if (selectedModels && selectedModels.length > 0) {
+	    selectedModels.forEach(function (model) {
+	        let quantity = 1; // Valor por defecto para quantity
+			
+	        // Si activeQuantity está activo, obtener la cantidad ingresada para cada modelo
+	        if (activeQuantity) {
+	            let quantityInput = $(`#input-${model}`).val();
+	            if (quantityInput && !isNaN(quantityInput)) {
+	                quantity = parseInt(quantityInput, 10); // Convertir a número entero
+	            }
+	        }
+			
+	        // Agregar el producto al array de productos
+	        products.push({
+	            id: model,
+	            quantity: quantity
+	        });
+	    });
+	}  
+
+  let model = getProductsBy("sku", selectedModels[0]);
 
   // TITULO DE LA PROPUESTA
   var NombreProducto = model.name;
@@ -182,35 +209,30 @@
 
   // PAYLOAD COMPLETO
   let opt = {
-   chatbot: botName,
-   to: to,
-   doc: {
-    title: "{{title}} " + {{tituloVariable}},
- products: [
-  {
-   id: model.sku,
-   quantity: 1,
-  },
- ],
-  status: "Ready",
-   currency: currency,
-    metadata: {
-   webhook: useWebhookHubspot,
-   customAttributes: customAttributes
- },
- dic: {
-  hash: json.hash,
+    chatbot: botName,
+    to: to,
+    doc: {
+      title: "{{title}} " + {{tituloVariable}},
+      products: products,
+      status: "Ready",
+      currency: currency,
+      metadata: {
+        webhook: useWebhookHubspot,
+        customAttributes: customAttributes
+      },
+      dic: {
+        hash: json.hash,
+      }
     },
-   },
-  emailClient: true,
-  emailAgent: true,
-  assignedAgentEmail: agent,
-  };
- window.nodriza.api.proposalbot.generate(opt, function (err, res) {
-  success("De clic en aceptar para enviar su cotización...");
-  window.location =
-   "https://api.whatsapp.com/send?phone=" + fullPhoneNumber + "&text=Hola " + json.firstName + " " + json.lastName + "%0A%0A" + "Le envio la cotización solicitada. Puede acceder a ella haciendo click en el siguiente enlace: " + "%0A" + res.url + "%0A%0A" + "Para activar el link recuerde presionar OK en el mensaje de aceptación o simplemente responder el chat. Tambien puede grabar el número en sus contactos." + "%0A%0A" + "Quedo atento a cualquier duda o aclaración.";
- });
+    emailClient: true,
+    emailAgent: true,
+    assignedAgentEmail: agent,
+    };
+  window.nodriza.api.proposalbot.generate(opt, function (err, res) {
+    success("De clic en aceptar para enviar su cotización...");
+    window.location =
+    "https://api.whatsapp.com/send?phone=" + fullPhoneNumber + "&text=Hola " + json.firstName + " " + json.lastName + "%0A%0A" + "Le envio la cotización solicitada. Puede acceder a ella haciendo click en el siguiente enlace: " + "%0A" + res.url + "%0A%0A" + "Para activar el link recuerde presionar OK en el mensaje de aceptación o simplemente responder el chat. Tambien puede grabar el número en sus contactos." + "%0A%0A" + "Quedo atento a cualquier duda o aclaración.";
+  });
  }
 
 
@@ -275,12 +297,21 @@
     });
 
     window.selectedProducts = productsList;
-    $("#model").empty();
-    $("#model").append(getModelOptions());
-    $("#model").select2({
-     placeholder: "Seleccione el Modelo",
-     allowClear: true,
-    });
+		$('#model').empty();
+		$('#model').append(getModelOptions());
+		$('#model').select2({
+		    placeholder: "Seleccione el Modelo",
+		    allowClear: true,
+		    multiple: isMultiple
+		}).on('select2:unselecting', function(e) {
+		    // Solo prevenir el enfoque automático cuando se está deseleccionando un producto
+		    setTimeout(() => {
+		        $('#model').select2('open'); // Reabrir el menú después de deseleccionar
+		    }, 1);
+		}).on('select2:select', function(e) {
+		    // Si se selecciona un producto, permitir que el menú funcione normalmente
+		    $('#model').off('select2:unselecting');
+		});
 
     let $modelOptions = $("#model option");
     $modelOptions.sort((a, b) => {
@@ -289,12 +320,48 @@
      return 0;
     });
 
-    $("#model").html($modelOptions).trigger("change");
+    //$("#model").html($modelOptions).trigger("change");
    },
    function (error) {
     console.error("Error en la consulta de productos:", error);
    }
   );
+
+  $('#model').on('change', function () {
+		  const selectedModels = $(this).val();
+		  const quantitiesDiv = $("#quantities");
+				
+		  if (selectedModels && selectedModels.length > 0 && isMultiple) {
+		      if (!activeQuantity) return;
+				
+		      selectedModels.forEach(function (model) {
+              // Obtener el texto del modelo en lugar del value
+              const modelText = $(`#model option[value="${model}"]`).text();
+		          // Verificar si ya existe el campo de cantidad para el modelo seleccionado
+		          if ($(`#quantity-${model}`).length === 0) {
+		              // Si no existe, crear el campo de cantidad
+		              const quantityInputHtml = `
+		                  <div class="quantity-input" id="quantity-${model}">
+		                      <label for="input-${model}">Cantidad para ${modelText}:</label>
+		                      <input type="number" id="input-${model}" name="input-${model}" data-model="${model}" min="1" value="1" required>
+		                  </div>
+		              `;
+		              quantitiesDiv.append(quantityInputHtml);
+		          }
+		      });
+				
+		      // Remover los campos de cantidad para los modelos que ya no están seleccionados
+		      $(".quantity-input").each(function () {
+		          const model = $(this).find('input').data('model');
+		          if (!selectedModels.includes(model)) {
+		              $(this).remove();
+		          }
+		      });
+		  } else {
+		      // Si no hay modelos seleccionados, limpiar el contenedor de cantidades
+		      quantitiesDiv.empty();
+		  }
+	});
 
   fetchData(
    `https://${domain}/v1/category`,
@@ -399,8 +466,56 @@
  }
 
  .select2.select2-container.select2-container--default {
-  width: 100% !important;
+  width: 100%;
  }
+
+ /* --- Multiple --- */
+        .select2-selection--multiple {
+				    height: auto !important; /* Asegúrate de que no sea un textarea */
+				    min-height: 38px; /* Ajusta la altura mínima */
+				    background-color: #fff; /* Fondo blanco del select */
+				}
+				
+				.select2-selection--multiple .select2-selection__choice {
+				    background-color: #007bff !important; /* Fondo azul para las opciones seleccionadas */
+				    color: white !important; /* Texto blanco */
+				    border: 1px solid #007bff !important; /* Borde azul */
+				    padding: 5px; /* Espaciado */
+				    border-radius: 4px; /* Bordes redondeados */
+				    margin-right: 5px; /* Separación entre las etiquetas seleccionadas */
+				}
+				
+				.select2-selection--multiple .select2-selection__choice__remove {
+				    color: white !important; /* Color blanco para el icono de eliminar */
+				    margin-right: 5px; /* Espacio antes del texto */
+				}
+				
+				.select2-selection--multiple .select2-selection__choice__remove:hover {
+				    color: red !important; /* Cambia el color al pasar el ratón por encima del icono de eliminar */
+				}
+
+        .select2-search.select2-search--inline .select2-search__field::-webkit-scrollbar-thumb {
+            background: none !important;
+            border: none !important;
+        }
+
+        button.select2-selection__clear {
+          padding-right: 5px !important; 
+        }
+				
+				.quantity-input input {
+					border-radius: 5px;
+			    padding: 5px;
+			    width: 50px;
+				} 
+				#chatbot-automotriz textarea {
+					 resize: none !important;
+				}        
+				#quantities {
+				    max-height: 200px; /* Altura máxima para el contenedor */
+				    overflow-y: auto; /* Habilita el scroll vertical si el contenido excede la altura máxima */
+				    margin-top: 10px; /* Espaciado entre el contenedor y el resto del contenido */
+				}        
 
  /* --- Estilos Selector de pais --- */
  .iti {
@@ -409,32 +524,51 @@
 
  .form-group input[type="tel"] {
   padding-left: 60px;
-  /* Ajusta el padding para mostrar el prefijo correctamente */
  }
 
  .iti__country-list {
   background-color: #fff;
-  /* Cambia el fondo a blanco */
  }
 
  .iti__country-list .iti__country {
   color: #000 !important;
-  /* Cambia el color del texto a negro */
  }
 
  .iti__country-list .iti__country:hover,
  .iti__country-list .iti__country:focus {
   background-color: #f0f0f0;
-  /* Cambia el fondo al pasar el ratón */
  }
 
  .iti__selected-dial-code {
   color: #000 !important;
-  /* Cambia el color del texto a negro */
  }
 
- /* --- Estilos Formulario Bot --- */
+				/* Personalizar el scrollbar para todos los elementos en la página */
+				::-webkit-scrollbar {
+				    width: 8px; /* Ancho del scroll */
+				}
+				
+				::-webkit-scrollbar-track {
+				    background: #f1f1f1; /* Color de fondo del track (canal) */
+				}
+				
+				::-webkit-scrollbar-thumb {
+				    background-color: #000; /* Color del scroll (negro) */
+				    border-radius: 10px; /* Bordes redondeados */
+				    border: 2px solid #f1f1f1; /* Espacio alrededor del scroll */
+				}
+				
+				/* Opcional: Cambiar el color del scroll al pasar el ratón */
+				::-webkit-scrollbar-thumb:hover {
+				    background-color: #555; /* Color más oscuro al pasar el ratón */
+				}
+				
+				#chatbot-automotriz [type=search] {
+					  margin-top: 6px;
+    				margin-left: 10px;
+				} 
 
+ /* --- Estilos Formulario Bot --- */
  #chatbot-automotriz * {
   font-family: "{{nombreFuente}}" !important;
  }
@@ -477,12 +611,10 @@
     <div class="row">
      <div class="col-12 padding-right">
       <h3 class="d-none d-lg-block">
-       Diligencie los siguientes datos para crear una cotización al
-       instante:
+       Diligencie los siguientes datos para crear una cotización al instante:
       </h3>
       <h5 class="d-md-none">
-       Diligencie los siguientes datos para crear una cotización al
-       instante:
+       Diligencie los siguientes datos para crear una cotización al instante:
       </h5>
      </div>
     </div>
@@ -492,7 +624,7 @@
       <div class="form-group">
        <h4 class="d-none d-lg-block">Seleccione un Asesor:</h4>
        <h6 class="d-lg-none">Seleccione un Asesor:</h6>
-       <select name="agent" id="agent" class="js-searchBox form-control select2-hidden-accessible" required="">
+       <select class="form-control" name="agent" id="agent" required="">
         <!-- Options Agents Goest Here -->
        </select>
       </div>
@@ -500,10 +632,13 @@
       <h4 class="d-none d-lg-block">Seleccione el Modelo:</h4>
       <h6 class="d-lg-none">Seleccione el Modelo:</h6>
       <div class="form-group">
-       <select class="form-control" name="model" id="model" required="">
+       <select class="form-control" name="model" id="model" multiple="multiple" required="">
         <!-- Options Models Goest Here -->
        </select>
       </div>
+      <div class="form-group">
+        <div id="quantities"></div>
+      </div>      
 
       <h4 class="d-none d-lg-block">Datos del lead:</h4>
       <h6 class="d-lg-none">Datos del lead:</h6>
@@ -514,8 +649,7 @@
        <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Apellido" required="" />
       </div>
       <div class="form-group">
-       <input class="form-control" type="text" name="mobile" id="mobile" placeholder="Celular"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '');" required="" />
+       <input class="form-control" type="text" name="mobile" id="mobile" placeholder="Celular" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required="" />
       </div>
       <div class="form-group">
        <input class="form-control" type="text" name="email" id="email" placeholder="Email" required="" />
@@ -532,15 +666,12 @@
       <div class="form-group checkbox">
        <label for="promotions">
         <input type="checkbox" name="promotions" id="promotions" checked="checked" />
-        Autorizo el uso de mis datos para recibir información sobre
-        promociones, eventos y descuentos.
+        Autorizo el uso de mis datos para recibir información sobre promociones, eventos y descuentos.
        </label>
       </div>
       <div class="form-group checkbox">
        <label for="authorized">
-        <input type="checkbox" name="authorized" id="authorized" checked="checked" />
-        Autorizo el uso de mis datos según la
-        <a href="{{terms}}" target="_blank" style="text-decoration: underline">política de clientes</a>
+        <input type="checkbox" name="authorized" id="authorized" checked="checked" /> Autorizo el uso de mis datos según la <a href="{{terms}}" target="_blank" style="text-decoration: underline">política de clientes</a>
        </label>
       </div>
       <div class="form-group">
