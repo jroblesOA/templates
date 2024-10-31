@@ -21,6 +21,7 @@
  const useWebhookHubspot = {{ hubspot }};
  const rolesString = "{{rolesAgentes}}";
  const rolesAgentes = {roles: rolesString.split(', ').map(role => role.trim())};
+ const filtroProductos = '{{filtroProductos}}';
 
  const customAttributes = [
   {
@@ -119,13 +120,36 @@
   return options;
  }
 
- function getSelectedProducts() {
-  if (!productsList) {
-   console.error("productsList no está definido");
-   return [];
+ {{#if filtroProductos}}
+ function getCategoryOptions() {
+  let options = "";
+  for (let i = 0; i < categoriesList.length; i++) {
+   let category = categoriesList[i];
+   if (category.type == '{{filtroProductos}}') {
+      options += '<option value="' + category.slug + '">' + category.name + "</option>";
+   }
   }
-  return productsList.filter((product) => !product.disabled);
- }
+  options += '<option value="" selected="selected">CATEGORIES</option>';
+  return options;
+ } 
+ {{/if}}
+
+ function getSelectedProducts() {
+  const selectedCategory = $('#category').val();
+
+  if (!productsList) {
+    console.error("productsList no está definido");
+    return [];
+  }
+
+  if (filtroProductos === "Pricing List") {
+    return productsList.filter(product => !product.disabled && product.pricingList === selectedCategory);
+  } else if (filtroProductos === "Product") {
+    return productsList.filter(product => !product.disabled && product.category === selectedCategory);
+  } else {
+    return productsList.filter(product => !product.disabled);
+  }
+}
 
  function getProductsBy(key, values) {
   let isString;
@@ -160,6 +184,14 @@
   let sku = $("#model").val();
   let model = getProductsBy("sku", sku);
  }
+
+ function toggleContainer() {
+	  if ($('#category').val()) {
+	      $('#product-container').show(); // Muestra el contenedor si hay una opción seleccionada
+	  } else {
+	      $('#product-container').hide(); // Oculta el contenedor si no hay selección
+	  }
+	}  
 
  // ===========================================
 
@@ -270,6 +302,7 @@
     productsList = response.map((product) => {
      return {
       pricingList: product.pricingList,
+      category: product.category,
       sku: product.sku,
       name: product.name,
       disabled: product.disabled,
@@ -304,10 +337,6 @@
    { limit: 1000 },
    { Authorization: `Bearer ${bearerToken}` },
    function (response) {
-    if (!response || response.length === 0) {
-     console.error("No se recibieron productos");
-     return;
-    }
     categoriesList = response.map((category) => {
      return {
       type: category.type,
@@ -316,28 +345,38 @@
       disabled: category.disabled,
      };
     });
-
-    window.selectedCategories = categoriesList;
-
-    $("#pricingList").empty();
-    $("#pricingList").select2({
+    
+    $("#category").empty().append(getCategoryOptions());
+    $("#category").select2({
      placeholder: "Seleccione el Listado de precios",
      allowClear: true,
     });
 
-    let $categoriesOptions = $("#pricingList option");
+    let $categoriesOptions = $("#category option");
     $categoriesOptions.sort((a, b) => {
      if ($(a).text() > $(b).text()) return 1;
      if ($(a).text() < $(b).text()) return -1;
      return 0;
     });
 
-    $("#pricingList").html($categoriesOptions).trigger("change");
+    $("#category").html($categoriesOptions).trigger("change");
    },
    function (error) {
     console.error("Error en la consulta de categories:", error);
    }
   );
+
+  {{#if filtroProductos}}
+      $('#category').on('change', function() {
+      	toggleContainer();
+          $('#model').empty();
+          $('#model').append(getModelOptions());
+          $('#model').select2({
+              placeholder: "Seleccione el Modelo",
+              allowClear: true
+          });
+      });  
+  {{/if}}
 
   let input = document.querySelector("#mobile");
   let iti = window.intlTelInput(input, {
@@ -478,14 +517,8 @@
    <div id="info-container">
     <div class="row">
      <div class="col-12 padding-right">
-      <h3 class="d-none d-lg-block">
-       Diligencie los siguientes datos para crear una cotización al
-       instante:
-      </h3>
-      <h5 class="d-md-none">
-       Diligencie los siguientes datos para crear una cotización al
-       instante:
-      </h5>
+      <h3 class="d-none d-lg-block">Diligencie los siguientes datos para crear una cotización al instante:</h3>
+      <h5 class="d-md-none">Diligencie los siguientes datos para crear una cotización al instante:</h5>
      </div>
     </div>
     <br />
@@ -499,12 +532,22 @@
        </select>
       </div>
 
-      <h4 class="d-none d-lg-block">Seleccione el Modelo:</h4>
-      <h6 class="d-lg-none">Seleccione el Modelo:</h6>
+      {{#if filtroProductos}}
       <div class="form-group">
-       <select class="form-control" name="model" id="model" required="">
-        <!-- Options Models Goest Here -->
-       </select>
+        <h4 class="d-none d-lg-block">Seleccione <span id="textoSeleccion"></span></h4>
+        <h6 class="d-lg-none">Seleccione <span id="textoSeleccion"></span></h6>
+        <select name="category" id="category" class="js-searchBox form-control select2-hidden-accessible" required="">
+         <!-- Options Categories Goest Here -->
+        </select>
+       </div>  
+      {{/if}}        
+
+      <div class="form-group" id="product-container">
+        <h4 class="d-none d-lg-block">Seleccione el Modelo:</h4>
+        <h6 class="d-lg-none">Seleccione el Modelo:</h6>
+        <select class="form-control" name="model" id="model" required="">
+          <!-- Options Models Goest Here -->
+        </select>
       </div>
 
       <h4 class="d-none d-lg-block">Datos del lead:</h4>
@@ -533,15 +576,12 @@
       <!-- <p>LOS CAMPOS MARCADOS CON * SON OBLIGATORIOS</p> -->
       <div class="form-group checkbox">
        <label for="promotions">
-        <input type="checkbox" name="promotions" id="promotions" checked="checked" />
-        Autorizo el uso de mis datos para recibir información sobre
-        promociones, eventos y descuentos.
+        <input type="checkbox" name="promotions" id="promotions" checked="checked" />Autorizo el uso de mis datos para recibir información sobre promociones, eventos y descuentos.
        </label>
       </div>
       <div class="form-group checkbox">
        <label for="authorized">
-        <input type="checkbox" name="authorized" id="authorized" checked="checked" />
-        Autorizo el uso de mis datos según la
+        <input type="checkbox" name="authorized" id="authorized" checked="checked" />Autorizo el uso de mis datos según la
         <a href="{{terms}}" target="_blank" style="text-decoration: underline">política de clientes</a>
        </label>
       </div>
@@ -569,5 +609,14 @@
   const decodedCSS = decodeHTMLEntities(encodedCSS);
   const styleTag = document.querySelector('style');
   styleTag.innerHTML += '\n' + decodedCSS;
+
+  const textoSeleccionElement = document.getElementById('textoSeleccion');
+  if (filtroProductos === "Pricing List") {
+    textoSeleccionElement.textContent = "un listado de precios:";
+  } else if (filtroProductos === "Product") {
+    textoSeleccionElement.textContent = "una categoría de precios:";
+  } else {
+    textoSeleccionElement.textContent = "";
+  }  
  </script>
 </div>
