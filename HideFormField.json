@@ -8,7 +8,7 @@
     },
     "rating": {
       "isLeadvisible": false
-    },
+    },    
     "status": {
       "isLeadvisible": false
     },
@@ -179,7 +179,7 @@
     },
     "source": {
       "visible": true
-    },
+    },    
     "specialObservations": {
       "visible": true
     },
