@@ -1,0 +1,61 @@
+{
+ "PlanDePago":{
+  "type": "json",
+  "size": "small",
+  "label": "Detalle plan de pago",
+  "formSchema": {
+   "separacion": {
+    "type": "float",
+    "label": "Separación",
+    "defaultsTo": 2000000
+  },
+  "cesantias": {
+   "type": "float",
+   "label": "Cesantias",
+   "defaultsTo": 0
+ },  
+ "subsidio": {
+  "type": "array",
+  "label": "Subsidio",
+  "multiple": false,
+  "defaultsTo": 0,
+  "enum": [
+   26000000,
+   39000000
+ ]  
+}, 
+"ahorros": {
+ "type": "float",
+ "label": "Ahorros",
+ "defaultsTo": 0
+},  
+"primas": {
+ "type": "float",
+ "label": "Primas",
+ "defaultsTo": 0
+},  
+"FechaEntrega": {
+ "type": "datetime",
+ "label": "Fecha de Entrega",
+ "defaultsTo": ""
+},  
+"PlazoCredito": {
+ "type": "array",
+ "label": "Plazo del Credito (Meses)",
+ "multiple": false,
+ "defaultsTo": 0,
+ "enum": [
+  60,
+  120,
+  180,
+  240
+]  
+}, 
+"TasaEA": {
+ "type": "float",
+ "label": "Tasa de Interes E.A",
+ "defaultsTo": 0
+}
+ }
+}
+}

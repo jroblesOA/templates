@@ -22,7 +22,7 @@ function (options = "proposal=this products=this.products") {
 				if (isNaN(valorNumerico)) {
 						return 'El valor ingresado no es un número válido.';
 				}
-				return valorNumerico.toFixed(1) + '%';
+				return (valorNumerico * 100).toFixed(1) + '%';
 			} 
 
     // Valores predeterminados
@@ -39,24 +39,34 @@ function (options = "proposal=this products=this.products") {
     /*VARIABLES*/
     let total = proposal.total || 0;
     let {
-     separacion = valoresFijos.separacion, 
-     cesantias = valoresFijos.cesantias, 
-     subsidio = valoresFijos.subsidio, 
-     ahorros = valoresFijos.ahorros, 
-     primas = valoresFijos.primas, 
-     PlazoCredito = valoresFijos.PlazoCredito, 
-     TasaEA = valoresFijos.TasaEA
-   } = PlanDePago || {};
+      separacion = valoresFijos.separacion, 
+      cesantias = valoresFijos.cesantias, 
+      subsidio = valoresFijos.subsidio, 
+      ahorros = valoresFijos.ahorros, 
+      primas = valoresFijos.primas, 
+      PlazoCredito = valoresFijos.PlazoCredito, 
+      TasaEA = valoresFijos.TasaEA
+    } = PlanDePago || {};
 
     let FechaEntrega = proposal.metadata && proposal.metadata.PlanDePago && proposal.metadata.PlanDePago.FechaEntrega !== undefined ? new Date(proposal.metadata.PlanDePago.FechaEntrega) : new Date();
     let hoy = new Date();
-    const tasaRow = TasaEA ? `<tr><td>Tasa:</td><td>${formatPercentage(TasaEA)}</td></tr>` : '';
+    const tasaRow = TasaEA ? `<tr><td>Tasa E.A:</td><td>${formatPercentage(TasaEA)}</td></tr>` : '';
 
     /*CALCULOS*/
-    let valorCuotaInicial = total * 0.3
-    let valorCredito = total * 0.7
-    
     let abonosCuotaInicial = separacion + cesantias + subsidio + ahorros + primas
+    let PabonosCuotaInicial = (abonosCuotaInicial / total) * 100
+
+    let cuotaInicialCalculada;
+    if (PabonosCuotaInicial > 30) {
+        cuotaInicialCalculada = PabonosCuotaInicial / 100;
+    } else {
+        cuotaInicialCalculada = 0.3;
+    }
+
+    let valorCuotaInicial = total * cuotaInicialCalculada
+    let Pcredito = (1 - cuotaInicialCalculada)   
+    let valorCredito = total * (1 - cuotaInicialCalculada)
+    
     let saldoCuotaInicial = valorCuotaInicial - abonosCuotaInicial
 
     let anosDiferencia = FechaEntrega.getFullYear() - hoy.getFullYear();
@@ -71,6 +81,14 @@ function (options = "proposal=this products=this.products") {
           (Math.pow(1 + tasaMensual, PlazoCredito) - 1) 
         : valorCredito / PlazoCredito)
     : valorCredito;
+    
+    let htmlsaldoCuotaInicial = "";
+    if (saldoCuotaInicial > 0) {
+        htmlsaldoCuotaInicial = `
+            <tr><td>Plazo (Meses)</td><td>${plazoCuotaInicialMeses}</td></tr>
+            <tr><th>Cuota mensual</th><th>${formatCurrency(cuotaMensual)}</th></tr>
+        `;
+    } 
     
     return `
 <style>
@@ -99,7 +117,7 @@ function (options = "proposal=this products=this.products") {
     <div class="column column-6">
       <table class="table">
         <tbody>
-          <tr><th>Cuota inicial (30%)</th><th>${formatCurrency(valorCuotaInicial)}</th></tr>
+          <tr><th>Cuota inicial (${formatPercentage(cuotaInicialCalculada)})</th><th>${formatCurrency(valorCuotaInicial)}</th></tr>
           <tr><td>Separación:</td><td>${formatCurrency(separacion)}</td></tr>
           <tr><td>Subsidio</td><td>${formatCurrency(subsidio)}</td></tr>
           <tr><td>Cesantías</td><td>${formatCurrency(cesantias)}</td></tr>
@@ -107,15 +125,14 @@ function (options = "proposal=this products=this.products") {
           <tr><td>Primas</td><td>${formatCurrency(primas)}</td></tr>
           <tr><td>TOTAL</td><td>${formatCurrency(abonosCuotaInicial)}</td></tr>
           <tr><th>Saldo cuota Inicial</th><th>${formatCurrency(saldoCuotaInicial)}</th></tr>
-          <tr><td>Plazo (Meses)</td><td>${plazoCuotaInicialMeses}</td></tr>
-          <tr><th>Cuota mensual</th><th>${formatCurrency(cuotaMensual)}</th></tr>
+          ${htmlsaldoCuotaInicial}
         </tbody>
       </table>
     </div>
     <div class="column column-6">
       <table class="table">
         <tbody>
-          <tr><th>Valor del crédito (70%)</th><th>${formatCurrency(valorCredito)}</th></tr>
+          <tr><th>Valor del crédito (${formatPercentage(Pcredito)})</th><th>${formatCurrency(valorCredito)}</th></tr>
           ${tasaRow}
           <tr><td>Plazo (Meses)</td><td>${PlazoCredito}</td></tr>
           <tr><th>Cuota de crédito Aprox.</th><th>${formatCurrency(cuotaCredito)}</th></tr>

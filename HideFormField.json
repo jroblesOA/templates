@@ -204,6 +204,9 @@
     "type": {
       "visible": false
     },
+    "unpublishProposal": {
+     "visible": false
+    },
     "updatedAt": {
       "visible": false
     },
@@ -253,6 +256,9 @@
     },
     "companyShortname": {
       "visible": false
+    },
+    "comparativeProposal": {
+"visible": true
     },
     "converted": {
       "visible": false
