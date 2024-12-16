@@ -105,19 +105,6 @@
  }
 
  // ========== LOGICA PARA PINTAR DATOS =======================
-
- function getAgentOptions() {
-  let options = "";
-  for (let i = 0; i < agentsList.length; i++) {
-   let agent = agentsList[i];
-   if (agent.email !== 'aosorio@nodriza.io') {
-      options += '<option value="' + agent.email + '">' + agent.firstName + ' ' + agent.lastName + '</option>';
-    }
-  }
-  options += '<option value="" selected="selected">AGENTE</option>';
-  return options;
- }
-
  {{#if filtroProductos}}
  function getCategoryOptions() {
   let options = "";
