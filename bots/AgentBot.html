@@ -22,6 +22,7 @@
  const rolesString = "{{rolesAgentes}}";
  const rolesAgentes = {roles: rolesString.split(', ').map(role => role.trim())};
  const filtroProductos = '{{filtroProductos}}';
+ const filtroProductos2 = '{{filtroProductos2}}';
 
  const customAttributes = [
   {
@@ -82,6 +83,17 @@
   return re.test(String(email).toLowerCase());
  }
 
+ function ordenarOpciones(selector) {
+	  let $options = $(selector + " option");
+	  $options.sort((a, b) => {
+	    const textA = $(a).text().toUpperCase();
+	    const textB = $(b).text().toUpperCase();
+	    return textA.localeCompare(textB);
+	  });
+	  $(selector).html($options);
+	  $(selector).trigger("change");
+	}
+
  // ========= FUNCION PARA ENVIO DEL FORMULARIO ============
  function submitForm(e) {
   e.preventDefault();
@@ -121,35 +133,96 @@
  }
 
  {{#if filtroProductos}}
- function getCategoryOptions() {
-  let options = "";
-  for (let i = 0; i < categoriesList.length; i++) {
-   let category = categoriesList[i];
-   if (category.type == '{{filtroProductos}}') {
-      options += '<option value="' + category.slug + '">' + category.name + "</option>";
-   }
-  }
-  options += '<option value="" selected="selected">CATEGORIES</option>';
-  return options;
- } 
- {{/if}}
+	function getCategoryOptions() {
+	 let optionsCategory1 = "";
+	 let optionsCategory2 = "";
 
- function getSelectedProducts() {
-  const selectedCategory = $('#category').val();
+	 for (let i = 0; i < categoriesList.length; i++) {
+	   let category = categoriesList[i];
+	   if (category.type === filtroProductos) {
+	     optionsCategory1 += '<option value="' + category.slug + '">' + category.name + "</option>";
+	   }
+	   if (filtroProductos2 && category.type === filtroProductos2) {
+	     optionsCategory2 += '<option value="' + category.slug + '">' + category.name + "</option>";
+	   }
+	 }
+	 optionsCategory1 += '<option value="" selected="selected">CATEGORIES</option>';
+	 optionsCategory2 += '<option value="" selected="selected">CATEGORIES</option>';
 
-  if (!productsList) {
-    console.error("productsList no está definido");
-    return [];
-  }
-
-  if (filtroProductos === "Pricing List") {
-    return productsList.filter(product => !product.disabled && product.pricingList === selectedCategory);
-  } else if (filtroProductos === "Product") {
-    return productsList.filter(product => !product.disabled && product.category === selectedCategory);
-  } else {
-    return productsList.filter(product => !product.disabled);
-  }
+	 return { optionsCategory1, optionsCategory2 };
 }
+{{/if}}
+
+	function getSelectedProducts() {
+	  const selectedCategory1 = $("#category").length ? $("#category").val() : null;
+	  const selectedCategory2 = $("#category2").length ? $("#category2").val() : null;
+	
+	  if (!productsList) {
+	    console.error("productsList no está definido");
+	    return [];
+	  }
+	
+	  return productsList.filter((product) => {
+	    if (product.disabled) return false;
+	
+	    const matchesCategory1 =
+	      filtroProductos === "Pricing List"
+	        ? selectedCategory1 && product.pricingList === selectedCategory1
+	        : filtroProductos === "Product"
+	        ? selectedCategory1 && product.category === selectedCategory1
+	        : true;
+	
+	    const matchesCategory2 =
+	      filtroProductos2 === "Pricing List"
+	        ? selectedCategory2 && product.pricingList === selectedCategory2
+	        : filtroProductos2 === "Product"
+	        ? selectedCategory2 && product.category === selectedCategory2
+	        : true;
+	
+	    // El producto debe cumplir con ambas condiciones si ambas categorías están seleccionadas
+	    if (selectedCategory1 && selectedCategory2) {
+	      return matchesCategory1 && matchesCategory2;
+	    }
+	
+	    // Si solo una categoría está seleccionada, evalúa solo esa
+	    if (selectedCategory1) return matchesCategory1;
+	    if (selectedCategory2) return matchesCategory2;
+	
+	    // Si no hay categorías seleccionadas, incluye todos los productos habilitados
+	    return true;
+	  });
+	}
+
+ function getModelOptions() {
+   const selectedProducts = getSelectedProducts();
+
+   if (!selectedProducts.length) {
+     console.warn("No hay productos que cumplan con las condiciones seleccionadas.");
+   }
+   
+   selectedProducts.sort((a, b) => {
+     const textA = a.name.toUpperCase();
+     const textB = b.name.toUpperCase();
+     return textA.localeCompare(textB);
+   });	
+   
+   let options = "";
+   selectedProducts.forEach((product) => {
+     options += `<option value="${product.sku}">${product.name}</option>`;
+   });
+ 
+   // Opción por defecto
+   options += '<option value="">Seleccione un producto</option>';
+   return options;
+ }
+
+ function toggleContainer() {
+   if ($('#category').val() || $('#category2').val()) {
+     $('#product-container').show(); // Muestra el contenedor si alguna categoría está seleccionada
+   } else {
+     $('#product-container').hide(); // Oculta el contenedor si no hay selección
+   }
+ }
 
  function getProductsBy(key, values) {
   let isString;
@@ -167,31 +240,6 @@
   }
   return isString ? products[0] : products;
  }
-
- function getModelOptions() {
-  let selectedProducts = getSelectedProducts();
-  let options = "";
-  for (let i = 0; i < selectedProducts.length; i++) {
-   let product = selectedProducts[i];
-   options +=
-    '<option value="' + product.sku + '">' + product.name + "</option>";
-  }
-  options += '<option value="" selected="selected">DEFAULT</option>';
-  return options;
- }
-
- function changeModel() {
-  let sku = $("#model").val();
-  let model = getProductsBy("sku", sku);
- }
-
- function toggleContainer() {
-	  if ($('#category').val()) {
-	      $('#product-container').show(); // Muestra el contenedor si hay una opción seleccionada
-	  } else {
-	      $('#product-container').hide(); // Oculta el contenedor si no hay selección
-	  }
-	}  
 
  // ===========================================
 
@@ -240,11 +288,11 @@
   emailAgent: true,
   assignedAgentEmail: agent,
   };
- window.nodriza.api.proposalbot.generate(opt, function (err, res) {
-  success("De clic en aceptar para enviar su cotización...");
-  window.location =
-   "https://api.whatsapp.com/send?phone=" + fullPhoneNumber + "&text=Hola " + json.firstName + " " + json.lastName + "%0A%0A" + "Le envio la cotización solicitada. Puede acceder a ella haciendo click en el siguiente enlace: " + "%0A" + res.url + "%0A%0A" + "Para activar el link recuerde presionar OK en el mensaje de aceptación o simplemente responder el chat. Tambien puede grabar el número en sus contactos." + "%0A%0A" + "Quedo atento a cualquier duda o aclaración.";
- });
+  window.nodriza.api.proposalbot.generate(opt, function (err, res) {
+    success("De clic en aceptar para enviar su cotización...");
+    window.location =
+    "https://api.whatsapp.com/send?phone=" + fullPhoneNumber + "&text=Hola " + json.firstName + " " + json.lastName + "%0A%0A" + "Le envio la cotización solicitada. Puede acceder a ella haciendo click en el siguiente enlace: " + "%0A" + res.url + "%0A%0A" + "Para activar el link recuerde presionar OK en el mensaje de aceptación o simplemente responder el chat. Tambien puede grabar el número en sus contactos." + "%0A%0A" + "Quedo atento a cualquier duda o aclaración.";
+  });
  }
 
 
@@ -276,13 +324,7 @@
      allowClear: true,
     });
 
-    let $agentOptions = $("#agent option");
-    $agentOptions.sort((a, b) => {
-     if ($(a).text() > $(b).text()) return 1;
-     if ($(a).text() < $(b).text()) return -1;
-     return 0;
-    });
-    $("#agent").html($agentOptions).trigger("change");
+    ordenarOpciones("#agent");
    },
    function (error) {
     console.error("Error en la consulta de agentes:", error);
@@ -317,14 +359,7 @@
      allowClear: true,
     });
 
-    let $modelOptions = $("#model option");
-    $modelOptions.sort((a, b) => {
-     if ($(a).text() > $(b).text()) return 1;
-     if ($(a).text() < $(b).text()) return -1;
-     return 0;
-    });
-
-    $("#model").html($modelOptions).trigger("change");
+    ordenarOpciones("#model");
    },
    function (error) {
     console.error("Error en la consulta de productos:", error);
@@ -336,46 +371,46 @@
    "GET",
    { limit: 1000 },
    { Authorization: `Bearer ${bearerToken}` },
-   function (response) {
-    categoriesList = response.map((category) => {
-     return {
-      type: category.type,
-      slug: category.slug,
-      name: category.name,
-      disabled: category.disabled,
-     };
-    });
-    
-    $("#category").empty().append(getCategoryOptions());
-    $("#category").select2({
-     placeholder: "Seleccione el Listado de precios",
-     allowClear: true,
-    });
+    function (response) {
+     categoriesList = response.map((category) => {
+      return {
+       type: category.type,
+       slug: category.slug,
+       name: category.name,
+       disabled: category.disabled,
+      };
+     });
+ 
+     const { optionsCategory1, optionsCategory2 } = getCategoryOptions();
 
-    let $categoriesOptions = $("#category option");
-    $categoriesOptions.sort((a, b) => {
-     if ($(a).text() > $(b).text()) return 1;
-     if ($(a).text() < $(b).text()) return -1;
-     return 0;
-    });
-
-    $("#category").html($categoriesOptions).trigger("change");
+     $("#category").empty().append(optionsCategory1).select2({
+         placeholder: "Seleccione el Listado de precios",
+         allowClear: true,
+       });
+ 
+     $("#category2").empty().append(optionsCategory2).select2({
+         placeholder: "Seleccione la categoria",
+         allowClear: true,
+       });
+ 
+     ordenarOpciones("#category");
+     ordenarOpciones("#category2");
    },
    function (error) {
-    console.error("Error en la consulta de categories:", error);
+     console.error("Error en la consulta de categorías:", error);
    }
-  );
+ );
 
   {{#if filtroProductos}}
-      $('#category').on('change', function() {
-      	toggleContainer();
-          $('#model').empty();
-          $('#model').append(getModelOptions());
-          $('#model').select2({
-              placeholder: "Seleccione el Modelo",
-              allowClear: true
-          });
-      });  
+  $('#category, #category2').on('change', function() {
+     toggleContainer();
+        $('#model').empty();
+        $('#model').append(getModelOptions());
+        $('#model').select2({
+            placeholder: "Seleccione el Modelo",
+            allowClear: true
+        });
+    });  
   {{/if}}
 
   let input = document.querySelector("#mobile");
@@ -534,12 +569,22 @@
 
       {{#if filtroProductos}}
       <div class="form-group">
-        <h4 class="d-none d-lg-block">Seleccione <span id="textoSeleccion"></span></h4>
-        <h6 class="d-lg-none">Seleccione <span id="textoSeleccion"></span></h6>
-        <select name="category" id="category" class="js-searchBox form-control select2-hidden-accessible" required="">
-         <!-- Options Categories Goest Here -->
-        </select>
-       </div>  
+       <h4 class="d-none d-lg-block">Seleccione <span id="textoSeleccion"></span></h4>
+       <h6 class="d-lg-none">Seleccione <span id="textoSeleccion"></span></h6>
+       <select name="category" id="category" class="js-searchBox form-control select2-hidden-accessible">
+        <!-- Options Categories Goest Here -->
+       </select>
+      </div> 
+      {{/if}}
+      
+      {{#if filtroProductos2}}
+     <div class="form-group">
+       <h4 class="d-none d-lg-block">Seleccione <span id="textoSeleccion2"></span></h4>
+       <h6 class="d-lg-none">Seleccione <span id="textoSeleccion2"></span></h6>
+       <select name="category2" id="category2" class="js-searchBox form-control select2-hidden-accessible">
+        <!-- Options Categories Goest Here -->
+       </select>
+      </div>   
       {{/if}}        
 
       <div class="form-group" id="product-container">
@@ -611,12 +656,22 @@
   styleTag.innerHTML += '\n' + decodedCSS;
 
   const textoSeleccionElement = document.getElementById('textoSeleccion');
+  const textoSeleccion2Element = document.getElementById('textoSeleccion2');
+  
   if (filtroProductos === "Pricing List") {
     textoSeleccionElement.textContent = "un listado de precios:";
   } else if (filtroProductos === "Product") {
     textoSeleccionElement.textContent = "una categoría de precios:";
   } else {
     textoSeleccionElement.textContent = "";
-  }  
+  }
+  
+  if (filtroProductos2 === "Pricing List") {
+    textoSeleccion2Element.textContent = "un listado de precios:";
+  } else if (filtroProductos2 === "Product") {
+    textoSeleccion2Element.textContent = "una categoría de precios:";
+  } else {
+    textoSeleccion2Element.textContent = "";
+  }
  </script>
 </div>
