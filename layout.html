@@ -22,6 +22,14 @@
         font-weight: 500;
         font-style: normal;
     }
+
+    @font-face {
+        font-family: 'Korolev';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Korolev/Korolev-Regular.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Korolev/Korolev-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }    
     
     @font-face {
         font-family: 'Korolev';
@@ -83,8 +91,7 @@
     <!-- ====== Aviso de Privacidad ====== -->
     <div style="position: absolute;top: 90%; text-align: center !important;padding: 0px 20px;" class="no-print">
         <p style="color: #ffffff;font-size: 1rem;">AVISO DE PRIVACIDAD</p>
-        <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">Usted recibe la siguiente oferta comercial por solicitud propia y de esta forma acepta nuestra política para el tratamiento de datos personales, de lo contrario es importante que reporte inmediatamente el incidente al siguiente correo electrónico:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a>
-        </p>
+        <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">Usted recibe la siguiente oferta comercial por solicitud propia y de esta forma acepta nuestra política para el tratamiento de datos personales, de lo contrario es importante que reporte inmediatamente el incidente al siguiente correo electrónico:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a></p>
     </div>
 </div>
 <br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print">   
@@ -155,11 +162,10 @@
     <br>
     <br>
     <p style="font-size: 1.4rem;line-height: 1.4;">Hola {{or relatedUser.firstName relatedLead.firstName}},
-        <br><br> 
-        Mi nombre es {{agent this 'firstName'}} {{agent this 'lastName'}}, {{agent this 'position'}} de {{host.name}}, es un gusto tener la oportunidad de presentar nuestra propuesta en respuesta a los requerimientos entregados, espero que sea
-        de su agrado.
-        <br><br> Quedo a su disposición, para cualquier duda o aclaración puede contactarme vía WhatsApp al número: <strong> {{agent this 'mobile'}}</strong> y responderé a la brevedad posible.
-    </p>
+    <br><br>
+    Mi nombre es {{agent this 'firstName'}} {{agent this 'lastName'}}, {{agent this 'position'}} de {{host.name}}, es un gusto tener la oportunidad de presentar nuestra propuesta en respuesta a los requerimientos entregados, espero que sea de su agrado.
+    <br><br>
+    Quedo a su disposición, para cualquier duda o aclaración puede contactarme vía WhatsApp al número: <strong> {{agent this 'mobile'}}</strong> y responderé a la brevedad posible.</p>
     <br><br><br><br><br>
 
     <div class="row">
@@ -242,7 +248,7 @@
     <h2>{{or relatedUser.firstName relatedLead.firstName}}, gracias por la aprobación!</h2>
     <h3>Esta propuesta estará disponible en esta dirección en cualquier momento que sea requerida. Si desea una copia haga <a href="{{downloadUrl}}"><strong>clic aquí.</strong></a></h3>
     {{else}}
-	<br><br>
+	   <br><br>
     <h1>Aprobación</h1>
     <br>
     <h3>— {{or relatedUser.firstName relatedLead.firstName}}, esta propuesta puede ser aprobada instantaneamente añadiendo su firma digital.</h3>

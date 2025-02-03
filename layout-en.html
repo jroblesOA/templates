@@ -22,6 +22,14 @@
         font-weight: 500;
         font-style: normal;
     }
+
+    @font-face {
+        font-family: 'Korolev';
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Korolev/Korolev-Regular.eot') format('embedded-opentype');
+        src: url('//cdn.jsdelivr.net/gh/jerobles/fonts@master/Korolev/Korolev-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }     
     
     @font-face {
         font-family: 'Korolev';
@@ -83,8 +91,7 @@
     <!-- ====== Notice of Privacy ====== -->
     <div style="position: absolute;top: 90%; text-align: center !important;padding: 0px 20px;" class="no-print">
         <p style="color: #ffffff;font-size: 1rem;">NOTICE OF PRIVACY</p>
-        <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">You receive the following commercial offer at your own request and in this way you accept our policy for the treatment of personal data, otherwise it is important that you immediately report the incident to the following email:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a>
-        </p>
+        <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">You receive the following commercial offer at your own request and in this way you accept our policy for the treatment of personal data, otherwise it is important that you immediately report the incident to the following email:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a></p>
     </div>
 </div>
 <br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print">
@@ -155,11 +162,10 @@
     <br>
     <br>
     <p style="font-size: 1.4rem;line-height: 1.4;">Hi {{or relatedUser.firstName relatedLead.firstName}},
-        <br><br> 
-        My name is {{agent this 'firstName'}} {{agent this 'lastName'}}, {{agent this 'position'}} of {{host.name}}, and it is a pleasure to have the opportunity to present our proposal in response to the requirements submitted, I hope you like it.
-        <br><br> 
-        I remain at your disposal, for any questions or clarification you can contact me via WhatsApp at the number: <strong>{{agent this 'mobile'}}</strong> and I will reply as soon as possible.
-    </p>
+     <br><br>
+     My name is {{agent this 'firstName'}} {{agent this 'lastName'}}, {{agent this 'position'}} of {{host.name}}, and it is a pleasure to have the opportunity to present our proposal in response to the requirements submitted, I hope you like it.
+     <br><br>
+     I remain at your disposal, for any questions or clarification you can contact me via WhatsApp at the number: <strong>{{agent this 'mobile'}}</strong> and I will reply as soon as possible.</p>
     <br><br><br><br><br>
 
     <div class="row">
@@ -244,7 +250,7 @@
     <h2>{{or relatedUser.firstName relatedLead.firstName}}, thanks for your approval!</h2>
     <h3>This proposal will be available at this address any time you need it. If you want to download a copy <a href="{{downloadUrl}}"><strong>clic here.</strong></a></h3>
     {{else}}
-	<br><br>
+	   <br><br>
     <h1>Approval</h1>
     <br>
     <h3>— {{or relatedUser.firstName relatedLead.firstName}}, you can immediately approve this proposal by adding your electronic signature.</h3>
