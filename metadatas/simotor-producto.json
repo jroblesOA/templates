@@ -1,0 +1,289 @@
+{
+ "MOTOR" : {
+     "type": "array",
+     "label": "MOTOR",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "AGCO POWER",
+ "Simpson"
+     ]
+   },
+ "POTENCIA" : {
+     "type": "array",
+     "label": "POTENCIA",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "75hp",
+ "95hp",
+ "105hp",
+ "115HP",
+ "125HP",
+ "135HP",
+ "145HP",
+ "160hp",
+ "180hp"
+     ]
+   },
+ "ASPIRACION" : {
+     "type": "array",
+     "label": "ASPIRACION",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "Turbo Intercooler"
+     ]
+   },
+ "TRANSMISION" : {
+     "type": "array",
+     "label": "TRANSMISION",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "8x2",
+         "12x4",
+         "12x12",
+         "Powershift 18x18",
+         "12x4 Superlenta",
+         "24x24 superlenta"
+     ]
+   },
+ "VELOCIDAD TDF" : {
+     "type": "array",
+     "label": "VELOCIDAD TDF",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "540rpm",
+ "540 / 540E / 1000"
+     ]
+   },
+ "CAUDAL HIDRAULICO" : {
+     "type": "array",
+     "label": "CAUDAL HIDRAULICO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "57 l/min",
+         "98 l/min"
+     ]
+   },
+ "ALCE HIDRAULICO" : {
+     "type": "array",
+     "label": "ALCE HIDRAULICO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "1.684kgs",
+         "2.500kgs",
+         "3.200kgs",
+         "4.950kgs",
+         "8.000kgs"
+     ]
+   },
+ "RODADO" : {
+     "type": "array",
+     "label": "RODADO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "12.4-24 R1 18.4-30 R1",
+         "14.9-24 R2 23.1-26R2",
+         "18.4-34 R1 14.9-24 R1",
+         "23.1-30 R2 14.9-28 R2",
+         "23.1-34R2 14.9-28R2",
+         "24.5-32R1 18.4-26R1",
+         "28.8-38 R2 Dual 18.4-26R2",
+         "9.5-24 16.9-28"      
+     ]
+   },
+ "PESO" : {
+     "type": "array",
+     "label": "PESO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "4.300 kg",
+         "7.000 kg",
+         "7.975 kg"
+     ]
+   },
+ "INVERSOR DE MARCHA" : {
+     "type": "array",
+     "label": "INVERSOR DE MARCHA",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "Electrohidráulico",
+         "Mecánico"
+     ]
+   },
+ "TOMA DE FUERZA" : {
+     "type": "array",
+     "label": "TOMA DE FUERZA",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "540/1000rpm"
+     ]
+   },
+ "PILOTO AUTOMATICO" : {
+     "type": "array",
+     "label": "PILOTO AUTOMATICO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "Si",
+       "No"
+     ]
+   },
+ "LINEAS" : {
+     "type": "array",
+     "label": "LINEAS",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "4",
+ "20",
+ "22",
+ "26"
+     ]
+   },
+ "ESPACIAMIENTO" : {
+     "type": "array",
+     "label": "ESPACIAMIENTO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "17cm","80cm-90cm"
+     ]
+   },
+ "DISTRIBUIDOR DE SEMILLAS" : {
+     "type": "array",
+     "label": "DISTRIBUIDOR DE SEMILLAS",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "Mecánico"
+     ]
+   },
+ "DISTRIBUIDOR DE ABONO" : {
+     "type": "array",
+     "label": "DISTRIBUIDOR DE ABONO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "Mecánico",
+ "Fertisystem"
+     ]
+   },
+ "TRACCION" : {
+     "type": "array",
+     "label": "TRACCION",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "4X4"
+     ]
+   },
+ "TOMAS CONTROL REMOTO" : {
+     "type": "array",
+     "label": "TOMAS CONTROL REMOTO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "2"
+     ]
+   },
+ "TRANSPORTE LONGITUDINAL" : {
+     "type": "array",
+     "label": "TRANSPORTE LONGITUDINAL",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "SI"
+     ]
+   },
+ "CONTADOR DE HECTAREAS" : {
+     "type": "array",
+     "label": "CONTADOR DE HECTAREAS",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "SI"
+     ]
+   },
+ "CAPACIDAD MAXIMA DE ELEVACION" : {
+     "type": "array",
+     "label": "CAPACIDAD MAXIMA DE ELEVACION",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "50.35",
+         "50.4",
+         "54.3",
+         "55.8"  
+     ]
+   },
+ "MAXIMO ALCANCE HIDRAULICO" : {
+     "type": "array",
+     "label": "MAXIMO ALCANCE HIDRAULICO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "5.57",
+         "5.92",
+         "6.83",
+         "7.18"    
+     ]
+   },
+ "MOMENTO DE GIRO BRUTO" : {
+     "type": "array",
+     "label": "MOMENTO DE GIRO BRUTO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "16.28"
+     ]
+   },
+ "ANGULO DE GIRO" : {
+     "type": "array",
+     "label": "ANGULO DE GIRO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "420"
+     ]
+   },
+ "PRESION MAXIMA DE TRABAJO" : {
+     "type": "array",
+     "label": "PRESION MAXIMA DE TRABAJO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "210"
+     ]
+   },
+ "CAUDAL MAXIMO" : {
+     "type": "array",
+     "label": "CAUDAL MAXIMO",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+       "70"
+     ]
+   },
+ "PESO DE LA GRUA ESTANDAR" : {
+     "type": "array",
+     "label": "PESO DE LA GRUA ESTANDAR",
+     "multiple": false,
+     "defaultsTo": null,
+     "enum": [
+         "1315 kg",
+         "1330 kg",
+         "1420 kg",
+         "1430 kg" 
+     ]
+   }
+ }
