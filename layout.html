@@ -62,39 +62,39 @@
            </div>
        </div>-->
 
-<div style="position:relative" class="no-print">       
-    <img style="display: inline-block; margin-bottom:0px;" src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/cover.jpg" class="img-cover" alt="">
+   <div style="position:relative" class="no-print">       
+       <img style="display: inline-block; margin-bottom:0px;" src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/cover.jpg" class="img-cover" alt="">
 
-    <!-- ======= Contenido Cover ======== -->
-    <div style="position: absolute;top: 50%;width: 100%;text-align:center;">
-        <!--<div style="color: white; margin-top: 80px;">
-               <span style="display: block;font-weight: 400;font-size: 1.3em;">Versión {{{versionSlot this}}}</span>
-               <span style="display: block;font-weight: 400;margin-top: 7px;">{{#if expirationDate}}Oferta válida hasta {{shortDate expirationDate}} {{/if}}</span>
-           </div> -->
-        <div style="color: white !important;margin-top: 20px;margin-bottom: 20px;">
-            <span style="font-size: 2.6rem;font-weight: 700;line-height: 1;">{{title}}</span>
-        </div>
-        <!--<span class="separator" style="display: block;width: 110px;height: 5px;background: #164193;margin: 30px auto;"></span>-->
-        <div style="color: white; margin-top: 20px;">
-            <span style="font-size: 2.5rem;font-weight: 400;line-height: 1;">
-                {{#if relatedUser}}
-                Atn. {{relatedUser.firstName}} {{relatedUser.lastName}} {{#if relatedUser.company.name}}/ {{or relatedUser.company.name relatedLead.companyName }} {{/if}}
-                {{else if relatedLead}}
-                Atn. {{relatedLead.firstName}} {{relatedLead.lastName}} {{#if relatedLead.companyName}}/ {{or relatedUser.company.name relatedLead.companyName }} {{/if}}
-                {{else}}
-                <p class="text-danger"><strong>ADVERTENCIA: Esta propuesta no tiene usuario o lead relacionado.</strong></p>
-                {{/if}}
-            </span>
-        </div>
-    </div>
+       <!-- ======= Contenido Cover ======== -->
+       <div style="position: absolute;top: 50%;width: 100%;text-align:center;">
+           <!--<div style="color: white; margin-top: 80px;">
+                  <span style="display: block;font-weight: 400;font-size: 1.3em;">Versión {{{versionSlot this}}}</span>
+                  <span style="display: block;font-weight: 400;margin-top: 7px;">{{#if expirationDate}}Oferta válida hasta {{shortDate expirationDate}} {{/if}}</span>
+              </div> -->
+           <div style="color: white !important;margin-top: 20px;margin-bottom: 20px;">
+               <span style="font-size: 2.6rem;font-weight: 700;line-height: 1;">{{title}}</span>
+           </div>
+           <!--<span class="separator" style="display: block;width: 110px;height: 5px;background: #164193;margin: 30px auto;"></span>-->
+           <div style="color: white; margin-top: 20px;">
+               <span style="font-size: 2.5rem;font-weight: 400;line-height: 1;">
+                   {{#if relatedUser}}
+                   Atn. {{relatedUser.firstName}} {{relatedUser.lastName}} {{#if relatedUser.company.name}}/ {{or relatedUser.company.name relatedLead.companyName }} {{/if}}
+                   {{else if relatedLead}}
+                   Atn. {{relatedLead.firstName}} {{relatedLead.lastName}} {{#if relatedLead.companyName}}/ {{or relatedUser.company.name relatedLead.companyName }} {{/if}}
+                   {{else}}
+                   <p class="text-danger"><strong>ADVERTENCIA: Esta propuesta no tiene usuario o lead relacionado.</strong></p>
+                   {{/if}}
+               </span>
+           </div>
+       </div>
 
-    <!-- ====== Aviso de Privacidad ====== -->
-    <div style="position: absolute;top: 90%; text-align: center !important;padding: 0px 20px;" class="no-print">
-        <p style="color: #ffffff;font-size: 1rem;">AVISO DE PRIVACIDAD</p>
-        <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">Usted recibe la siguiente oferta comercial por solicitud propia y de esta forma acepta nuestra política para el tratamiento de datos personales, de lo contrario es importante que reporte inmediatamente el incidente al siguiente correo electrónico:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a></p>
-    </div>
-</div>
-<br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print">   
+       <!-- ====== Aviso de Privacidad ====== -->
+       <div style="position: absolute;top: 90%; text-align: center !important;padding: 0px 20px;" class="no-print">
+           <p style="color: #ffffff;font-size: 1rem;">AVISO DE PRIVACIDAD</p>
+           <p style="color: #000000;font-size: 0.9rem;line-height: inherit;margin-top: 10px;">Usted recibe la siguiente oferta comercial por solicitud propia y de esta forma acepta nuestra política para el tratamiento de datos personales, de lo contrario es importante que reporte inmediatamente el incidente al siguiente correo electrónico:&nbsp;<a href="#" style="font-size: 1em;">info@CLIENTE.com</a></p>
+       </div>
+   </div>
+   <br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print"><br class="no-print">   
 
     <div class="row">
 
@@ -122,8 +122,7 @@
 
         <div class="column column-6" style="margin-top:-30px">
             <!--    {{{hostCoSlot this}}}-->
-            <p style="font-size: 18px;">
-                {{agent this 'street||host.street'}}<br> {{agent this 'city||host.city'}}, {{agent this 'country||country.name'}}<br> Tel: {{agent this 'mobile||phone||company.phone'}}</p>
+            <p style="font-size: 18px;">{{agent this 'street||host.street'}}<br> {{agent this 'city||host.city'}}, {{agent this 'country||country.name'}}<br> Tel: {{agent this 'mobile||phone||company.phone'}}</p>
         </div>
 
         <!-- If relatedUser -->
@@ -177,7 +176,7 @@
                 Cordial saludo,<br>
                 <span style="color:#0C233A">{{agent this 'firstName'}} {{agent this 'lastName'}}</span> / <span style="color:#5D9FD7">{{agent this 'position'}}</span><br> 
                 Email. {{agent this 'email'}}<br> 
-                Teléfono. {{agent this 'mobile'}}</p>
+                Teléfono. {{or (agent this 'mobile') (agent this 'phone')}}</p>
             <!--{{agent this 'street'}}, {{agent this 'city'}}<br>
                 {{agent this 'country||country.name'}}<br>-->
         </div>
@@ -269,7 +268,7 @@
         <br><br>
         <img src="https://s3.amazonaws.com/cdn.nodriza.io/assets/img/template/recycle.gif" alt="" width="26px" style="padding: 3px;"> {{host.name}} es una empresa ambientalmente responsable, por esta razón presentamos propuestas electrónicas en pro del medio ambiente, antes de imprimir este documento, considere si es realmente necesario.
         <br><br> 
-        Copyright {{host.name}} ®2024</h6>
+        Copyright {{host.name}} ®2025</h6>
     <br><br><br>
 
     <img src="https://s3.amazonaws.com/files.nodriza.io/CLIENTE/assets/footer.jpg" class="img-cover no-print" alt="footer CLIENTE" style="margin-top: -10px;">

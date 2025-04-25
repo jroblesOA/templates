@@ -174,30 +174,6 @@ function (options = "proposal=this products=this.products") {
     "Recorrido": "https://chroma-studio.net/360/ingeurbe/piazza/apto_04_d/tour.html#new_tab"
   },
   {
-    "Proyecto": "piazza",
-    "Color": "#0D2F23",
-    "Tipo": "TIPO F",
-    "AreaTotal": "52m²",
-    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/tipo-f.jpg",
-    "Recorrido": "https://chroma-studio.net/360/ingeurbe/piazza/apto_06_f/tour.html#new_tab"
-  },
-  {
-    "Proyecto": "piazza",
-    "Color": "#0D2F23",
-    "Tipo": "TIPO G",
-    "AreaTotal": "66m²",
-    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/tipo-g.jpg",
-    "Recorrido": "https://chroma-studio.net/360/ingeurbe/piazza/apto_01_g/tour.html#new_tab"
-  },
-  {
-    "Proyecto": "piazza",
-    "Color": "#0D2F23",
-    "Tipo": "TIPO H",
-    "AreaTotal": "83m²",
-    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/tipo-h.jpg",
-    "Recorrido": "https://chroma-studio.net/360/ingeurbe/piazza/apto_03_h/tour.html#new_tab"
-  },
-  {
     "Proyecto": "treze",
     "Color": "#0D181C",
     "Tipo": "TIPO B",
@@ -259,6 +235,198 @@ function (options = "proposal=this products=this.products") {
     "Tipo": "TIPO D1",
     "AreaTotal": "28m²",
     "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/treze/apt/tipo-d1.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 12T",
+    "AreaTotal": "92m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_12T.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 12A",
+    "AreaTotal": "90m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_12A.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 12",
+    "AreaTotal": "90m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_12.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 11T",
+    "AreaTotal": "60m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_11T.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 11A",
+    "AreaTotal": "53m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_11A.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 11",
+    "AreaTotal": "53m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_11.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 10T",
+    "AreaTotal": "80m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_10T.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 10",
+    "AreaTotal": "70m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_10.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 9A",
+    "AreaTotal": "38m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_9A.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 8T",
+    "AreaTotal": "88m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_8T.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 8",
+    "AreaTotal": "86m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_8.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 7T",
+    "AreaTotal": "117m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_7T.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 7A",
+    "AreaTotal": "119m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_7A.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 7",
+    "AreaTotal": "120m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_7.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "cortteza",
+    "Color": "#31313E",
+    "Tipo": "TIPO 9",
+    "AreaTotal": null,
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/cortteza/apt/TIPO_9.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO K",
+    "AreaTotal": "73m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOK.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO IP",
+    "AreaTotal": "81m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOIP.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO I ",
+    "AreaTotal": "81m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOI.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO HP",
+    "AreaTotal": "83m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOHP.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO H",
+    "AreaTotal": "83m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOH.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO GP",
+    "AreaTotal": "66m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOGP.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO G",
+    "AreaTotal": "66m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOG.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO D2",
+    "AreaTotal": "50m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOD2.jpg",
+    "Recorrido": null
+  },
+  {
+    "Proyecto": "piazza",
+    "Color": "#0D2F23",
+    "Tipo": "TIPO A",
+    "AreaTotal": "49m2",
+    "Plano": "https://s3.amazonaws.com/files.nodriza.io/ingeurbe/piazza/apt/TIPOA.jpg",
     "Recorrido": null
   }
 ]
